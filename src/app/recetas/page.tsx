@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, Download } from "lucide-react";
+import { ClipboardList, Download, Search, X, CheckCircle2 } from "lucide-react";
 import { jsPDF } from "jspdf";
 import Disclaimer from "@/components/Disclaimer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { createClient } from "@/lib/supabase/client";
 
 interface FormData {
   veterinario: string;
@@ -18,6 +19,15 @@ interface FormData {
   tratamiento: string;
   indicaciones: string;
   fecha: string;
+}
+
+interface PatientOption {
+  id: string;
+  name: string;
+  species: string;
+  breed: string | null;
+  weight_kg: number | null;
+  owner_name: string;
 }
 
 function getTodayDate(): string {
@@ -41,6 +51,58 @@ export default function RecetasPage() {
     indicaciones: "", fecha: getTodayDate(),
   });
   const [generating, setGenerating] = useState(false);
+
+  // Patient lookup state
+  const [patients, setPatients] = useState<PatientOption[]>([]);
+  const [patientSearch, setPatientSearch] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedPatientName, setSelectedPatientName] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    async function loadPatients() {
+      const { data } = await supabase
+        .from("patients")
+        .select("id, name, species, breed, weight_kg, owner_name")
+        .order("name", { ascending: true });
+      setPatients(data ?? []);
+    }
+    loadPatients();
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filteredPatients = patientSearch.trim()
+    ? patients.filter((pt) => pt.name.toLowerCase().includes(patientSearch.toLowerCase()))
+    : patients;
+
+  function selectPatient(pt: PatientOption) {
+    const especieRaza = [pt.species, pt.breed].filter(Boolean).join(" - ");
+    setForm((prev) => ({
+      ...prev,
+      paciente: pt.name,
+      especieRaza,
+      peso: pt.weight_kg != null ? String(pt.weight_kg) : "",
+      propietario: pt.owner_name,
+    }));
+    setSelectedPatientName(pt.name);
+    setPatientSearch("");
+    setShowDropdown(false);
+  }
+
+  function clearPatientSelection() {
+    setSelectedPatientName(null);
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -224,6 +286,71 @@ export default function RecetasPage() {
           <legend className="px-2 text-xs font-bold uppercase tracking-wider text-primary">
             {p.patientSection}
           </legend>
+
+          {/* Patient lookup */}
+          <div className="mb-5 rounded-xl border border-border bg-background p-3.5">
+            <p className="mb-2 text-xs font-semibold text-muted">{p.searchPatientLabel}</p>
+
+            {selectedPatientName ? (
+              <div className="flex items-center gap-2">
+                <div className="flex flex-1 items-center gap-2 rounded-xl bg-primary/8 px-3 py-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-primary flex-shrink-0" strokeWidth={2} />
+                  <span className="text-xs font-medium text-primary">{p.patientLoaded}</span>
+                  <span className="text-xs font-semibold text-foreground">{selectedPatientName}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={clearPatientSelection}
+                  className="flex items-center gap-1 rounded-xl border border-border px-2.5 py-2 text-xs font-medium text-muted transition-all hover:border-red-300 hover:text-red-500"
+                >
+                  <X className="h-3 w-3" strokeWidth={2} />
+                  {p.clearPatient}
+                </button>
+              </div>
+            ) : (
+              <div ref={dropdownRef} className="relative">
+                <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" strokeWidth={2} />
+                <input
+                  type="text"
+                  value={patientSearch}
+                  onChange={(e) => setPatientSearch(e.target.value)}
+                  onFocus={() => setShowDropdown(true)}
+                  placeholder={p.searchPatientPlaceholder}
+                  className="w-full rounded-xl border border-border bg-surface py-2 pl-9 pr-4 text-sm text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                />
+                {showDropdown && (
+                  <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-52 overflow-y-auto rounded-xl border border-border bg-surface shadow-lg">
+                    {filteredPatients.length === 0 ? (
+                      <p className="px-4 py-3 text-xs text-muted">{p.noPatientsFound}</p>
+                    ) : (
+                      filteredPatients.map((pt) => (
+                        <button
+                          key={pt.id}
+                          type="button"
+                          onMouseDown={() => selectPatient(pt)}
+                          className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-surface-hover"
+                        >
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-primary/8 text-base">
+                            {pt.species === "perro" ? "🐶" : pt.species === "gato" ? "🐱" : "🐾"}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-foreground truncate">{pt.name}</p>
+                            <p className="text-xs text-muted truncate">
+                              {[pt.breed, pt.owner_name].filter(Boolean).join(" · ")}
+                            </p>
+                          </div>
+                          {pt.weight_kg && (
+                            <span className="ml-auto flex-shrink-0 text-xs text-muted">{pt.weight_kg} kg</span>
+                          )}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="paciente" className="mb-1.5 block text-sm font-semibold text-foreground">
