@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -26,21 +26,18 @@ export async function middleware(request: NextRequest) {
   );
 
   // IMPORTANT: do not add logic between createServerClient and getUser()
-  // A bug between them could leave the session in a broken state.
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const isAuthRoute = request.nextUrl.pathname.startsWith("/auth");
 
-  // Not logged in and trying to access protected route → redirect to login
   if (!user && !isAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }
 
-  // Already logged in and visiting auth pages → redirect to home
   if (user && isAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
@@ -49,14 +46,3 @@ export async function middleware(request: NextRequest) {
 
   return supabaseResponse;
 }
-
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static, _next/image (Next.js internals)
-     * - favicon.ico and common static assets
-     */
-    "/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
-};
