@@ -14,9 +14,9 @@ export default function NuevoPacientePage() {
   const { t } = useLanguage();
   const p = t.pages.pacientes;
   const router = useRouter();
-  const supabase = createClient();
 
   async function handleSubmit(data: PatientFormData) {
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error("Not authenticated");
 
@@ -51,7 +51,6 @@ export default function NuevoPacientePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <Link
           href="/pacientes"
@@ -71,7 +70,6 @@ export default function NuevoPacientePage() {
         </div>
       </div>
 
-      {/* Form card */}
       <div className="rounded-2xl border border-border bg-surface p-6">
         <PatientForm onSubmit={handleSubmit} />
       </div>

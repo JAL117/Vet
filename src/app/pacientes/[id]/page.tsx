@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Edit2, Trash2, PawPrint } from "lucide-react";
+import { ArrowLeft, Edit2, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Patient, formatAge } from "@/types/patient";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -31,7 +31,6 @@ export default function PatientDetailPage() {
   const p = t.pages.pacientes;
   const params = useParams();
   const router = useRouter();
-  const supabase = createClient();
   const id = params.id as string;
 
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -41,6 +40,7 @@ export default function PatientDetailPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
+    const supabase = createClient();
     async function load() {
       const { data, error } = await supabase
         .from("patients")
@@ -54,6 +54,7 @@ export default function PatientDetailPage() {
   }, [id]);
 
   async function handleDelete() {
+    const supabase = createClient();
     setDeleting(true);
     setDeleteError(null);
     const { error } = await supabase.from("patients").delete().eq("id", id);
@@ -89,7 +90,6 @@ export default function PatientDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <Link
           href="/pacientes"
@@ -122,12 +122,11 @@ export default function PatientDetailPage() {
         </div>
       </div>
 
-      {/* Patient info card */}
       <div className="rounded-2xl border border-border bg-surface p-5 space-y-0">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">{p.patientInfo}</p>
         <InfoRow label={p.species} value={patient.species === "perro" ? p.speciesDog : patient.species === "gato" ? p.speciesCat : p.speciesOther} />
         <InfoRow label={p.breed} value={patient.breed} />
-        <InfoRow label={p.sex} value={patient.sex === "macho" ? p.sexMale : patient.sex === "hembra" ? p.sexFemale : patient.sex ? undefined : p.sexUnknown} />
+        <InfoRow label={p.sex} value={patient.sex === "macho" ? p.sexMale : patient.sex === "hembra" ? p.sexFemale : p.sexUnknown} />
         <InfoRow label={p.neutered} value={patient.neutered ? p.yesNeutered : p.notNeutered} />
         <InfoRow label={p.age} value={patient.birth_date ? formatAge(patient.birth_date) : p.noAge} />
         <InfoRow label={p.birthDate} value={patient.birth_date ?? undefined} />
@@ -136,7 +135,6 @@ export default function PatientDetailPage() {
         <InfoRow label={p.microchip} value={patient.microchip} />
       </div>
 
-      {/* Owner info card */}
       <div className="rounded-2xl border border-border bg-surface p-5">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">{p.ownerInfo}</p>
         <InfoRow label={p.ownerName} value={patient.owner_name} />
@@ -145,7 +143,6 @@ export default function PatientDetailPage() {
         <InfoRow label={p.ownerAddress} value={patient.owner_address} />
       </div>
 
-      {/* Clinical info card */}
       {(patient.allergies || patient.notes) && (
         <div className="rounded-2xl border border-border bg-surface p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">{p.clinicalInfo}</p>
@@ -159,12 +156,10 @@ export default function PatientDetailPage() {
         </div>
       )}
 
-      {/* Registered on */}
       <p className="text-xs text-muted text-right">
         {p.registeredOn} {new Date(patient.created_at).toLocaleDateString()}
       </p>
 
-      {/* Danger zone */}
       <div className="rounded-2xl border border-red-200 bg-red-50/50 p-5 dark:border-red-800/30 dark:bg-red-900/10">
         <p className="text-xs font-semibold uppercase tracking-wider text-red-600/70 dark:text-red-400/70 mb-3">{p.dangerZone}</p>
         {deleteError && (

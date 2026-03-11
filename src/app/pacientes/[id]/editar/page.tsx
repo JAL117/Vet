@@ -16,13 +16,13 @@ export default function EditarPacientePage() {
   const p = t.pages.pacientes;
   const params = useParams();
   const router = useRouter();
-  const supabase = createClient();
   const id = params.id as string;
 
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const supabase = createClient();
     async function load() {
       const { data, error } = await supabase
         .from("patients")
@@ -36,6 +36,7 @@ export default function EditarPacientePage() {
   }, [id]);
 
   async function handleSubmit(data: PatientFormData) {
+    const supabase = createClient();
     const payload = {
       name: data.name,
       species: data.species,
@@ -107,7 +108,6 @@ export default function EditarPacientePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <Link
           href={`/pacientes/${id}`}
@@ -127,7 +127,6 @@ export default function EditarPacientePage() {
         </div>
       </div>
 
-      {/* Form card */}
       <div className="rounded-2xl border border-border bg-surface p-6">
         <PatientForm
           initialData={toFormData(patient)}
