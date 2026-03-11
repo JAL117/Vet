@@ -1,200 +1,117 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  categories,
-  getCalculatorsByCategory,
-  type CalculatorCategory,
-} from "@/lib/calculators";
-import ThemeToggle from "./ThemeToggle";
+import { Home, Calculator, BookOpen, FileText, ChevronRight } from "lucide-react";
+import { categories, getCalculatorsByCategory, type CalculatorCategory } from "@/lib/calculators";
+import { useLanguage } from "@/contexts/LanguageContext";
+import CalcIcon from "./CalcIcon";
+import ProfilePanel from "./ProfilePanel";
+import { useState } from "react";
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<
-    Set<CalculatorCategory>
-  >(new Set(["Emergencias", "Farmacologia", "Nutricion", "General"]));
+  const [expandedCategories, setExpandedCategories] = useState<Set<CalculatorCategory>>(
+    new Set(["Emergencias", "Farmacologia", "Nutricion", "General"])
+  );
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   const toggleCategory = (category: CalculatorCategory) => {
     setExpandedCategories((prev) => {
       const next = new Set(prev);
-      if (next.has(category)) {
-        next.delete(category);
-      } else {
-        next.add(category);
-      }
+      if (next.has(category)) next.delete(category);
+      else next.add(category);
       return next;
     });
   };
 
   const isActive = (path: string) => pathname === path;
+  const isMobileNavActive = (href: string, exact: boolean) =>
+    exact ? pathname === href : pathname.startsWith(href);
+
+  const mobileNavItems = [
+    { href: "/",            label: t.nav.home,      Icon: Home,       exact: true  },
+    { href: "/calculadoras",label: t.nav.calculate, Icon: Calculator, exact: false },
+    { href: "/referencia",  label: t.nav.guide,     Icon: BookOpen,   exact: true  },
+    { href: "/documentos",  label: t.nav.docs,      Icon: FileText,   exact: true  },
+  ];
+
+  const mainLinks = [
+    { href: "/",            label: t.nav.home,             Icon: Home     },
+    { href: "/documentos",  label: t.nav.generateDocument, Icon: FileText },
+    { href: "/referencia",  label: t.nav.quickGuide,       Icon: BookOpen },
+  ];
 
   const navContent = (
     <nav className="flex h-full flex-col" aria-label="Navegacion principal">
-      {/* Logo / Brand */}
+      {/* Logo */}
       <div className="flex items-center gap-3 border-b border-border px-5 py-5">
-        <Link
-          href="/"
-          onClick={() => setIsOpen(false)}
-          className="flex items-center gap-3"
-        >
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-xl text-white font-bold">
-            V
-          </div>
+        <Link href="/" className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-base text-white font-bold shadow-sm">V</div>
           <div>
-            <h1 className="text-lg font-bold text-foreground leading-tight">
-              VetCalc
-            </h1>
-            <p className="text-xs text-muted">Calculadora Veterinaria</p>
+            <p className="text-base font-bold text-foreground leading-tight">VetCalc</p>
+            <p className="text-xs text-muted">{t.nav.vetTool}</p>
           </div>
         </Link>
       </div>
 
       {/* Main links */}
       <div className="flex-1 overflow-y-auto px-3 py-4">
-        <ul className="space-y-1">
-          <li>
-            <Link
-              href="/"
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                isActive("/")
-                  ? "bg-primary/10 text-primary"
-                  : "text-foreground hover:bg-surface-hover"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5"
+        <ul className="space-y-0.5">
+          {mainLinks.map(({ href, label, Icon }) => (
+            <li key={href}>
+              <Link
+                href={href}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                  isActive(href) ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+                }`}
               >
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9,22 9,12 15,12 15,22" />
-              </svg>
-              Inicio
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/documentos"
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                isActive("/documentos")
-                  ? "bg-primary/10 text-primary"
-                  : "text-foreground hover:bg-surface-hover"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5"
-              >
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14,2 14,8 20,8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <polyline points="10,9 9,9 8,9" />
-              </svg>
-              Generar Documento
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/referencia"
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                isActive("/referencia")
-                  ? "bg-primary/10 text-primary"
-                  : "text-foreground hover:bg-surface-hover"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5"
-              >
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-              </svg>
-              Guia Rapida
-            </Link>
-          </li>
+                <Icon className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
+                {label}
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        {/* Separator */}
         <div className="my-4 border-t border-border" />
 
-        {/* Calculator categories */}
-        <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted">
-          Calculadoras
+        <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-muted">
+          {t.nav.calculators}
         </p>
-        <ul className="space-y-1">
+        <ul className="space-y-0.5">
           {categories.map((category) => {
             const calcs = getCalculatorsByCategory(category.name);
             const isExpanded = expandedCategories.has(category.name);
+            const catLabel = t.categories[category.name as keyof typeof t.categories] as string;
             return (
               <li key={category.name}>
                 <button
                   onClick={() => toggleCategory(category.name)}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-hover"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-hover"
                   aria-expanded={isExpanded}
                 >
-                  <span className="text-lg" aria-hidden="true">
-                    {category.icon}
-                  </span>
-                  <span className="flex-1 text-left">{category.name}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={`h-4 w-4 text-muted transition-transform ${
-                      isExpanded ? "rotate-90" : ""
-                    }`}
-                  >
-                    <polyline points="9,18 15,12 9,6" />
-                  </svg>
+                  <CalcIcon name={category.icon} className="h-4 w-4 flex-shrink-0 text-muted" strokeWidth={2} />
+                  <span className="flex-1 text-left">{catLabel}</span>
+                  <ChevronRight className={`h-3.5 w-3.5 text-muted transition-transform ${isExpanded ? "rotate-90" : ""}`} strokeWidth={2.5} />
                 </button>
                 {isExpanded && (
-                  <ul className="ml-4 space-y-0.5 border-l border-border pl-4">
-                    {calcs.map((calc) => (
-                      <li key={calc.id}>
-                        <Link
-                          href={calc.path}
-                          onClick={() => setIsOpen(false)}
-                          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
-                            isActive(calc.path)
-                              ? "bg-primary/10 text-primary font-medium"
-                              : "text-muted hover:text-foreground hover:bg-surface-hover"
-                          }`}
-                        >
-                          <span className="text-base" aria-hidden="true">
-                            {calc.icon}
-                          </span>
-                          {calc.name}
-                        </Link>
-                      </li>
-                    ))}
+                  <ul className="ml-4 mt-0.5 space-y-0.5 border-l border-border pl-3">
+                    {calcs.map((calc) => {
+                      const meta = t.calculatorMeta[calc.id as keyof typeof t.calculatorMeta];
+                      return (
+                        <li key={calc.id}>
+                          <Link
+                            href={calc.path}
+                            className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors ${
+                              isActive(calc.path) ? "bg-primary/10 text-primary font-medium" : "text-muted hover:text-foreground hover:bg-surface-hover"
+                            }`}
+                          >
+                            <CalcIcon name={calc.icon} className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={2} />
+                            {meta?.name ?? calc.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </li>
@@ -203,92 +120,51 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      {/* Footer with theme toggle */}
-      <div className="border-t border-border px-4 py-3 flex items-center justify-between">
-        <span className="text-xs text-muted">Tema</span>
-        <ThemeToggle />
+      {/* Footer with ProfilePanel */}
+      <div className="border-t border-border px-4 py-3">
+        <ProfilePanel sidebar />
       </div>
     </nav>
   );
 
   return (
     <>
-      {/* Mobile header bar */}
-      <header className="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between border-b border-border bg-surface px-4 lg:hidden">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-surface-hover"
-          aria-label="Abrir menu"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-6 w-6"
-          >
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
+      {/* MOBILE: Top header */}
+      <header className="fixed top-0 left-0 right-0 z-40 flex h-12 items-center justify-between border-b border-border bg-surface/95 backdrop-blur-sm px-4 lg:hidden">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm text-white font-bold">
-            V
-          </div>
-          <span className="text-base font-bold text-foreground">VetCalc</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm text-white font-bold shadow-sm">V</div>
+          <span className="text-sm font-bold text-foreground">VetCalc</span>
         </Link>
-        <ThemeToggle />
+        <ProfilePanel />
       </header>
 
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Sidebar - mobile slide-in */}
-      <aside
-        className={`fixed top-0 left-0 z-50 h-full w-72 transform border-r border-border bg-surface transition-transform duration-200 ease-in-out lg:hidden ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        aria-label="Menu lateral"
+      {/* MOBILE: Bottom nav */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch border-t border-border bg-surface/95 backdrop-blur-sm lg:hidden"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+        aria-label="Navegación principal"
       >
-        <div className="absolute top-3 right-3">
-          <button
-            onClick={() => setIsOpen(false)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
-            aria-label="Cerrar menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-5 w-5"
+        {mobileNavItems.map(({ href, label, Icon, exact }) => {
+          const active = isMobileNavActive(href, exact);
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={`flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
+                active ? "text-primary" : "text-muted hover:text-foreground"
+              }`}
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-        {navContent}
-      </aside>
+              <div className={`flex items-center justify-center w-10 h-6 rounded-xl transition-colors ${active ? "bg-primary/12" : ""}`}>
+                <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.8} />
+              </div>
+              <span className={`text-[10px] font-medium leading-none ${active ? "text-primary" : ""}`}>{label}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
-      {/* Sidebar - desktop always visible */}
-      <aside
-        className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:w-72 lg:flex-col lg:border-r lg:border-border lg:bg-surface"
-        aria-label="Menu lateral"
-      >
+      {/* DESKTOP: Sidebar */}
+      <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:w-72 lg:flex-col lg:border-r lg:border-border lg:bg-surface" aria-label="Menu lateral">
         {navContent}
       </aside>
     </>
