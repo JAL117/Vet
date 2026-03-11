@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { jsPDF } from "jspdf";
 import Disclaimer from "@/components/Disclaimer";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface FormData {
   veterinario: string;
@@ -46,6 +48,9 @@ function formatDate(dateStr: string): string {
 }
 
 export default function DocumentosPage() {
+  const { t } = useLanguage();
+  const p = t.pages.documentos;
+
   const [form, setForm] = useState<FormData>({
     veterinario: "",
     cedula: "",
@@ -236,28 +241,16 @@ export default function DocumentosPage() {
           href="/"
           className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="h-4 w-4"
-          >
-            <path
-              fillRule="evenodd"
-              d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Volver al inicio
+          <ArrowLeft className="h-4 w-4" strokeWidth={2} />
+          {t.common.back}
         </Link>
 
         <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Generador de Receta Veterinaria
+            {p.title}
           </h1>
           <p className="text-lg text-muted">
-            Complete los datos para generar una receta veterinaria en formato
-            PDF.
+            {p.subtitle}
           </p>
         </div>
 
@@ -271,7 +264,7 @@ export default function DocumentosPage() {
           {/* Professional Data */}
           <fieldset className="rounded-xl border border-border bg-surface p-6">
             <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-primary">
-              Datos del Profesional
+              {p.professionalSection}
             </legend>
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
@@ -279,7 +272,7 @@ export default function DocumentosPage() {
                   htmlFor="veterinario"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Nombre del Veterinario *
+                  {p.vetName} *
                 </label>
                 <input
                   type="text"
@@ -288,7 +281,7 @@ export default function DocumentosPage() {
                   value={form.veterinario}
                   onChange={handleChange}
                   required
-                  placeholder="MVZ. Nombre Apellido"
+                  placeholder={p.vetNamePlaceholder}
                   className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -297,7 +290,7 @@ export default function DocumentosPage() {
                   htmlFor="cedula"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Cedula Profesional
+                  {p.license}
                 </label>
                 <input
                   type="text"
@@ -305,7 +298,7 @@ export default function DocumentosPage() {
                   name="cedula"
                   value={form.cedula}
                   onChange={handleChange}
-                  placeholder="Numero de cedula"
+                  placeholder={p.licensePlaceholder}
                   className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -315,7 +308,7 @@ export default function DocumentosPage() {
           {/* Patient Data */}
           <fieldset className="rounded-xl border border-border bg-surface p-6">
             <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-primary">
-              Datos del Paciente
+              {p.patientSection}
             </legend>
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
@@ -323,7 +316,7 @@ export default function DocumentosPage() {
                   htmlFor="paciente"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Nombre del Paciente *
+                  {p.patientName} *
                 </label>
                 <input
                   type="text"
@@ -332,7 +325,7 @@ export default function DocumentosPage() {
                   value={form.paciente}
                   onChange={handleChange}
                   required
-                  placeholder="Nombre del animal"
+                  placeholder={p.patientNamePlaceholder}
                   className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -341,7 +334,7 @@ export default function DocumentosPage() {
                   htmlFor="especieRaza"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Especie y Raza
+                  {p.speciesBreed}
                 </label>
                 <input
                   type="text"
@@ -349,7 +342,7 @@ export default function DocumentosPage() {
                   name="especieRaza"
                   value={form.especieRaza}
                   onChange={handleChange}
-                  placeholder="Ej: Canino - Labrador"
+                  placeholder={p.speciesBreedPlaceholder}
                   className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -358,7 +351,7 @@ export default function DocumentosPage() {
                   htmlFor="peso"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Peso (kg)
+                  {p.weightKg}
                 </label>
                 <input
                   type="text"
@@ -366,7 +359,7 @@ export default function DocumentosPage() {
                   name="peso"
                   value={form.peso}
                   onChange={handleChange}
-                  placeholder="Ej: 25.5"
+                  placeholder={p.weightPlaceholder}
                   className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -375,7 +368,7 @@ export default function DocumentosPage() {
                   htmlFor="propietario"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Propietario *
+                  {p.owner} *
                 </label>
                 <input
                   type="text"
@@ -384,7 +377,7 @@ export default function DocumentosPage() {
                   value={form.propietario}
                   onChange={handleChange}
                   required
-                  placeholder="Nombre del propietario"
+                  placeholder={p.ownerPlaceholder}
                   className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -394,7 +387,7 @@ export default function DocumentosPage() {
           {/* Diagnosis & Treatment */}
           <fieldset className="rounded-xl border border-border bg-surface p-6">
             <legend className="px-2 text-sm font-semibold uppercase tracking-wide text-primary">
-              Diagnostico y Tratamiento
+              {p.treatmentSection}
             </legend>
             <div className="space-y-5">
               <div>
@@ -402,7 +395,7 @@ export default function DocumentosPage() {
                   htmlFor="diagnostico"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Diagnostico
+                  {p.diagnosis}
                 </label>
                 <textarea
                   id="diagnostico"
@@ -410,7 +403,7 @@ export default function DocumentosPage() {
                   value={form.diagnostico}
                   onChange={handleChange}
                   rows={2}
-                  placeholder="Diagnostico clinico del paciente"
+                  placeholder={p.diagnosisPlaceholder}
                   className="w-full resize-y rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -419,7 +412,7 @@ export default function DocumentosPage() {
                   htmlFor="tratamiento"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Tratamiento / Prescripcion
+                  {p.prescription}
                 </label>
                 <textarea
                   id="tratamiento"
@@ -427,7 +420,7 @@ export default function DocumentosPage() {
                   value={form.tratamiento}
                   onChange={handleChange}
                   rows={4}
-                  placeholder="Detalle del tratamiento y medicamentos prescritos"
+                  placeholder={p.prescriptionPlaceholder}
                   className="w-full resize-y rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -436,7 +429,7 @@ export default function DocumentosPage() {
                   htmlFor="indicaciones"
                   className="mb-1.5 block text-sm font-medium text-foreground"
                 >
-                  Indicaciones
+                  {p.instructions}
                 </label>
                 <textarea
                   id="indicaciones"
@@ -444,7 +437,7 @@ export default function DocumentosPage() {
                   value={form.indicaciones}
                   onChange={handleChange}
                   rows={3}
-                  placeholder="Indicaciones especiales para el propietario"
+                  placeholder={p.instructionsPlaceholder}
                   className="w-full resize-y rounded-lg border border-border bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -458,7 +451,7 @@ export default function DocumentosPage() {
                 htmlFor="fecha"
                 className="mb-1.5 block text-sm font-medium text-foreground"
               >
-                Fecha
+                {p.date}
               </label>
               <input
                 type="date"
@@ -483,12 +476,12 @@ export default function DocumentosPage() {
                 <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
                 <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
               </svg>
-              {generating ? "Generando..." : "Generar PDF"}
+              {generating ? p.generating : p.generate}
             </button>
           </div>
 
           <p className="text-sm text-muted">
-            * Campos obligatorios. El PDF se descargara automaticamente.
+            {p.required}
           </p>
         </form>
 
@@ -496,10 +489,9 @@ export default function DocumentosPage() {
 
         <div className="mt-8 border-t border-border pt-6 text-center text-sm text-muted">
           <p>
-            El documento se genera localmente en su navegador. Ningun dato es
-            enviado a servidores externos.{" "}
+            {p.privacy}{" "}
             <Link href="/disclaimer" className="text-primary hover:underline">
-              Ver aviso legal
+              {t.common.legalNotice}
             </Link>
           </p>
         </div>
