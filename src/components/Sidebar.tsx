@@ -305,7 +305,7 @@ export default function Sidebar() {
 
       {/* DESKTOP: Sidebar — full or icon rail */}
       <aside
-        className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:flex-col lg:border-r lg:border-border lg:bg-surface transition-all ${
+        className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:flex-col lg:border-r lg:border-border lg:bg-surface transition-all duration-300 ease-in-out ${
           isCollapsed ? "lg:w-16" : "lg:w-72"
         }`}
         aria-label="Menu lateral"

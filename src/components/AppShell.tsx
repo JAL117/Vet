@@ -18,7 +18,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <Sidebar />
       <main
-        className={`min-h-screen pt-12 pb-20 lg:pt-0 lg:pb-0 transition-all ${
+        className={`min-h-screen pt-12 pb-20 lg:pt-0 lg:pb-0 transition-all duration-300 ease-in-out ${
           isCollapsed ? "lg:pl-16" : "lg:pl-72"
         }`}
       >
