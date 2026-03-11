@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, Download, Search, X, CheckCircle2 } from "lucide-react";
+import { ClipboardList, Download, Search, X, CheckCircle2, BookOpen, AlertCircle } from "lucide-react";
 import { jsPDF } from "jspdf";
 import Disclaimer from "@/components/Disclaimer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -14,7 +14,9 @@ interface FormData {
   paciente: string;
   especieRaza: string;
   peso: string;
+  temperatura: string;
   propietario: string;
+  motivo: string;
   diagnostico: string;
   tratamiento: string;
   indicaciones: string;
@@ -47,16 +49,17 @@ export default function RecetasPage() {
 
   const [form, setForm] = useState<FormData>({
     veterinario: "", cedula: "", paciente: "", especieRaza: "",
-    peso: "", propietario: "", diagnostico: "", tratamiento: "",
-    indicaciones: "", fecha: getTodayDate(),
+    peso: "", temperatura: "", propietario: "", motivo: "",
+    diagnostico: "", tratamiento: "", indicaciones: "", fecha: getTodayDate(),
   });
   const [generating, setGenerating] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<"idle" | "saved" | "error">("idle");
 
   // Patient lookup state
   const [patients, setPatients] = useState<PatientOption[]>([]);
   const [patientSearch, setPatientSearch] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedPatientName, setSelectedPatientName] = useState<string | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<PatientOption | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,14 +98,19 @@ export default function RecetasPage() {
       peso: pt.weight_kg != null ? String(pt.weight_kg) : "",
       propietario: pt.owner_name,
     }));
-    setSelectedPatientName(pt.name);
+    setSelectedPatient(pt);
     setPatientSearch("");
     setShowDropdown(false);
+    setSyncStatus("idle");
   }
 
   function clearPatientSelection() {
-    setSelectedPatientName(null);
-    setForm((prev) => ({ ...prev, paciente: "", especieRaza: "", peso: "", propietario: "" }));
+    setSelectedPatient(null);
+    setForm((prev) => ({
+      ...prev,
+      paciente: "", especieRaza: "", peso: "", temperatura: "", propietario: "",
+    }));
+    setSyncStatus("idle");
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -110,8 +118,9 @@ export default function RecetasPage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     setGenerating(true);
+    setSyncStatus("idle");
     try {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -188,11 +197,13 @@ export default function RecetasPage() {
       addSection("DATOS DEL PACIENTE");
       addField("Paciente", form.paciente);
       addField("Especie / Raza", form.especieRaza);
-      addField("Peso", form.peso ? `${form.peso} kg` : "");
+      if (form.peso) addField("Peso", `${form.peso} kg`);
+      if (form.temperatura) addField("Temperatura", `${form.temperatura} °C`);
       addField("Propietario", form.propietario);
       y += 4;
 
       addSection("DIAGNOSTICO Y TRATAMIENTO");
+      if (form.motivo) addMultilineField("Motivo de consulta", form.motivo);
       addMultilineField("Diagnostico", form.diagnostico);
       addMultilineField("Tratamiento / Prescripcion", form.tratamiento);
       addMultilineField("Indicaciones", form.indicaciones);
@@ -225,6 +236,26 @@ export default function RecetasPage() {
 
       const fileName = `receta_${form.paciente.replace(/\s+/g, "_") || "veterinaria"}_${form.fecha}.pdf`;
       doc.save(fileName);
+
+      // Save to clinical history if a registered patient is selected
+      if (selectedPatient) {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { error } = await supabase.from("clinical_records").insert({
+            patient_id: selectedPatient.id,
+            user_id: user.id,
+            date: form.fecha,
+            reason: form.motivo || null,
+            weight_kg: form.peso ? parseFloat(form.peso) : null,
+            temperature: form.temperatura ? parseFloat(form.temperatura) : null,
+            diagnosis: form.diagnostico || null,
+            treatment: form.tratamiento || null,
+            notes: form.indicaciones || null,
+          });
+          setSyncStatus(error ? "error" : "saved");
+        }
+      }
     } finally {
       setGenerating(false);
     }
@@ -292,12 +323,16 @@ export default function RecetasPage() {
           <div className="mb-5 rounded-xl border border-border bg-background p-3.5">
             <p className="mb-2 text-xs font-semibold text-muted">{p.searchPatientLabel}</p>
 
-            {selectedPatientName ? (
+            {selectedPatient ? (
               <div className="flex items-center gap-2">
                 <div className="flex flex-1 items-center gap-2 rounded-xl bg-primary/8 px-3 py-2">
                   <CheckCircle2 className="h-3.5 w-3.5 text-primary flex-shrink-0" strokeWidth={2} />
                   <span className="text-xs font-medium text-primary">{p.patientLoaded}</span>
-                  <span className="text-xs font-semibold text-foreground">{selectedPatientName}</span>
+                  <span className="text-xs font-semibold text-foreground">{selectedPatient.name}</span>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <BookOpen className="h-3 w-3 text-primary/60" strokeWidth={2} />
+                    <span className="text-xs text-primary/70">{p.savedToHistory}</span>
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -384,6 +419,16 @@ export default function RecetasPage() {
               />
             </div>
             <div>
+              <label htmlFor="temperatura" className="mb-1.5 block text-sm font-semibold text-foreground">
+                {p.temperature}
+              </label>
+              <input
+                type="text" id="temperatura" name="temperatura"
+                value={form.temperatura} onChange={handleChange}
+                placeholder={p.temperaturePlaceholder}
+              />
+            </div>
+            <div className="sm:col-span-2">
               <label htmlFor="propietario" className="mb-1.5 block text-sm font-semibold text-foreground">
                 {p.owner} *
               </label>
@@ -402,6 +447,16 @@ export default function RecetasPage() {
             {p.treatmentSection}
           </legend>
           <div className="space-y-5">
+            <div>
+              <label htmlFor="motivo" className="mb-1.5 block text-sm font-semibold text-foreground">
+                {p.reason}
+              </label>
+              <input
+                type="text" id="motivo" name="motivo"
+                value={form.motivo} onChange={handleChange}
+                placeholder={p.reasonPlaceholder}
+              />
+            </div>
             <div>
               <label htmlFor="diagnostico" className="mb-1.5 block text-sm font-semibold text-foreground">
                 {p.diagnosis}
@@ -458,6 +513,20 @@ export default function RecetasPage() {
             {generating ? p.generating : p.generate}
           </button>
         </div>
+
+        {/* Sync status feedback */}
+        {syncStatus === "saved" && (
+          <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 dark:bg-emerald-900/20">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" strokeWidth={2} />
+            <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">{p.savedToHistory}</p>
+          </div>
+        )}
+        {syncStatus === "error" && (
+          <div className="flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 dark:bg-red-900/20">
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400 flex-shrink-0" strokeWidth={2} />
+            <p className="text-sm font-medium text-red-700 dark:text-red-400">{p.errorSaveHistory}</p>
+          </div>
+        )}
 
         <p className="text-xs text-muted">{p.required}</p>
       </form>
