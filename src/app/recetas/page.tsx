@@ -102,6 +102,7 @@ export default function RecetasPage() {
 
   function clearPatientSelection() {
     setSelectedPatientName(null);
+    setForm((prev) => ({ ...prev, paciente: "", especieRaza: "", peso: "", propietario: "" }));
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
