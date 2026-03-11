@@ -9,7 +9,7 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("vetcalc-theme");
+    const stored = localStorage.getItem("pawcure-theme");
     if (stored === "dark") {
       setDark(true);
       document.documentElement.classList.add("dark");
@@ -27,10 +27,10 @@ export default function ThemeToggle() {
     setDark(next);
     if (next) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("vetcalc-theme", "dark");
+      localStorage.setItem("pawcure-theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("vetcalc-theme", "light");
+      localStorage.setItem("pawcure-theme", "light");
     }
   };
 

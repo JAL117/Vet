@@ -47,9 +47,9 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex items-center gap-3 border-b border-border px-5 py-5">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-base text-white font-bold shadow-sm">V</div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-base text-white font-bold shadow-sm">P</div>
           <div>
-            <p className="text-base font-bold text-foreground leading-tight">VetCalc</p>
+            <p className="text-base font-bold text-foreground leading-tight">PawCure</p>
             <p className="text-xs text-muted">{t.nav.vetTool}</p>
           </div>
         </Link>
@@ -132,8 +132,8 @@ export default function Sidebar() {
       {/* MOBILE: Top header */}
       <header className="fixed top-0 left-0 right-0 z-40 flex h-12 items-center justify-between border-b border-border bg-surface/95 backdrop-blur-sm px-4 lg:hidden">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm text-white font-bold shadow-sm">V</div>
-          <span className="text-sm font-bold text-foreground">VetCalc</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm text-white font-bold shadow-sm">P</div>
+          <span className="text-sm font-bold text-foreground">PawCure</span>
         </Link>
         <ProfilePanel />
       </header>

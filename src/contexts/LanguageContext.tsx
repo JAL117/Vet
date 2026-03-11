@@ -26,7 +26,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("vetcalc-lang") as Lang | null;
+      const stored = localStorage.getItem("pawcure-lang") as Lang | null;
       if (stored === "es" || stored === "en") {
         setLangState(stored);
       }
@@ -36,7 +36,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const setLang = (newLang: Lang) => {
     setLangState(newLang);
     try {
-      localStorage.setItem("vetcalc-lang", newLang);
+      localStorage.setItem("pawcure-lang", newLang);
     } catch {}
   };
 

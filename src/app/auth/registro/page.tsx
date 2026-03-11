@@ -87,7 +87,7 @@ export default function RegistroPage() {
           <Stethoscope className="h-7 w-7 text-primary" strokeWidth={1.8} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">VetCalc</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">PawCure</h1>
           <p className="mt-0.5 text-sm text-muted">{a.brandSubtitle}</p>
         </div>
       </div>
@@ -233,7 +233,7 @@ export default function RegistroPage() {
         </p>
       </div>
 
-      <p className="mt-6 text-xs text-muted/60">VetCalc · v0.1.0</p>
+      <p className="mt-6 text-xs text-muted/60">PawCure · v0.1.0</p>
     </div>
   );
 }

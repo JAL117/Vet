@@ -11,7 +11,7 @@ function useTheme() {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("vetcalc-theme");
+    const stored = localStorage.getItem("pawcure-theme");
     if (stored === "dark") setDark(true);
     else if (stored === "light") setDark(false);
     else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setDark(true);
@@ -20,7 +20,7 @@ function useTheme() {
   const set = (toDark: boolean) => {
     setDark(toDark);
     document.documentElement.classList.toggle("dark", toDark);
-    localStorage.setItem("vetcalc-theme", toDark ? "dark" : "light");
+    localStorage.setItem("pawcure-theme", toDark ? "dark" : "light");
   };
 
   return { dark, set, mounted };

@@ -1,5 +1,5 @@
 -- ============================================================
--- VetCalc – Profiles table with Row Level Security
+-- PawCure – Profiles table with Row Level Security
 -- Best practices: RLS enabled, auth.uid() wrapped in SELECT
 -- for performance (cached once per query, not per row)
 -- ============================================================

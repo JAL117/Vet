@@ -201,7 +201,7 @@ export default function DocumentosPage() {
       doc.setFontSize(7);
       doc.setTextColor(148, 163, 184);
       const disclaimer =
-        "Esta receta fue generada con VetCalc como apoyo al criterio clinico. Los resultados deben ser verificados por el profesional medico veterinario responsable. VetCalc no se hace responsable por decisiones clinicas basadas unicamente en estos calculos.";
+        "Esta receta fue generada con PawCure como apoyo al criterio clinico. Los resultados deben ser verificados por el profesional medico veterinario responsable. PawCure no se hace responsable por decisiones clinicas basadas unicamente en estos calculos.";
       const disclaimerLines = doc.splitTextToSize(disclaimer, contentWidth);
       doc.text(disclaimerLines, margin, y);
       y += disclaimerLines.length * 4 + 6;
