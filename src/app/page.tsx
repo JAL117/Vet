@@ -9,7 +9,6 @@ import {
   Package,
   Receipt,
   Clock,
-  Stethoscope,
   ArrowRight,
 } from "lucide-react";
 import { categories, getCalculatorsByCategory } from "@/lib/calculators";
@@ -30,22 +29,6 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="pt-2 lg:pt-0">
-        <div className="mb-3 flex lg:justify-start justify-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary">
-            <Stethoscope className="h-3 w-3" strokeWidth={2.5} />
-            {h.badge}
-          </span>
-        </div>
-        <h1 className="text-3xl font-bold text-foreground sm:text-4xl text-center lg:text-left leading-tight">
-          {h.title}{" "}
-          <span className="text-primary">{h.titleHighlight}</span>
-        </h1>
-        <p className="mt-2 text-sm text-muted text-center lg:text-left max-w-xl">
-          {h.subtitle}
-        </p>
-      </section>
 
       {/* ── Platform Modules ─────────────────────────────────── */}
       <section>
