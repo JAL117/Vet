@@ -56,14 +56,35 @@ export default function RecetasPage() {
   const [syncStatus, setSyncStatus] = useState<"idle" | "saved" | "error">("idle");
   const [profileLoaded, setProfileLoaded] = useState(false);
 
-  // Load vet profile from localStorage
+  // Load vet profile: localStorage first (fast), then Supabase (authoritative)
   useEffect(() => {
-    const name = localStorage.getItem("pawcure-vet-name") ?? "";
-    const license = localStorage.getItem("pawcure-vet-license") ?? "";
-    if (name || license) {
-      setForm((prev) => ({ ...prev, veterinario: name, cedula: license }));
+    const cachedName = localStorage.getItem("pawcure-vet-name") ?? "";
+    const cachedLicense = localStorage.getItem("pawcure-vet-license") ?? "";
+    if (cachedName || cachedLicense) {
+      setForm((prev) => ({ ...prev, veterinario: cachedName, cedula: cachedLicense }));
       setProfileLoaded(true);
     }
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      supabase
+        .from("profiles")
+        .select("vet_name, vet_license")
+        .eq("id", user.id)
+        .single()
+        .then(({ data }) => {
+          if (!data) return;
+          const name = data.vet_name ?? "";
+          const license = data.vet_license ?? "";
+          if (name || license) {
+            localStorage.setItem("pawcure-vet-name", name);
+            localStorage.setItem("pawcure-vet-license", license);
+            setForm((prev) => ({ ...prev, veterinario: name, cedula: license }));
+            setProfileLoaded(true);
+          }
+        });
+    });
   }, []);
 
   // Patient lookup state

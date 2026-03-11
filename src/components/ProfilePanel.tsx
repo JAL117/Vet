@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Settings, Sun, Moon, Globe, Check, LogOut, User, Stethoscope } from "lucide-react";
 import { useLanguage, type Lang } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { createClient } from "@/lib/supabase/client";
 
 function useTheme() {
   const [dark, setDark] = useState(false);
@@ -36,9 +37,29 @@ function useVetProfile() {
   const [vetLicense, setVetLicenseState] = useState("");
   const [saved, setSaved] = useState(false);
 
+  // On mount: load from localStorage cache first, then sync from Supabase
   useEffect(() => {
     setVetNameState(localStorage.getItem("pawcure-vet-name") ?? "");
     setVetLicenseState(localStorage.getItem("pawcure-vet-license") ?? "");
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      supabase
+        .from("profiles")
+        .select("vet_name, vet_license")
+        .eq("id", user.id)
+        .single()
+        .then(({ data }) => {
+          if (!data) return;
+          const name = data.vet_name ?? "";
+          const license = data.vet_license ?? "";
+          setVetNameState(name);
+          setVetLicenseState(license);
+          localStorage.setItem("pawcure-vet-name", name);
+          localStorage.setItem("pawcure-vet-license", license);
+        });
+    });
   }, []);
 
   function setVetName(v: string) {
@@ -49,9 +70,19 @@ function useVetProfile() {
     setVetLicenseState(v);
     setSaved(false);
   }
-  function save() {
+  async function save() {
     localStorage.setItem("pawcure-vet-name", vetName);
     localStorage.setItem("pawcure-vet-license", vetLicense);
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase
+        .from("profiles")
+        .update({ vet_name: vetName, vet_license: vetLicense })
+        .eq("id", user.id);
+    }
+
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
