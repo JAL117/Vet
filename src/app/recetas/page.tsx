@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, Download, Search, X, CheckCircle2, BookOpen, AlertCircle } from "lucide-react";
+import { ClipboardList, Download, Search, X, CheckCircle2, BookOpen, AlertCircle, Stethoscope } from "lucide-react";
 import { jsPDF } from "jspdf";
 import Disclaimer from "@/components/Disclaimer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -54,6 +54,17 @@ export default function RecetasPage() {
   });
   const [generating, setGenerating] = useState(false);
   const [syncStatus, setSyncStatus] = useState<"idle" | "saved" | "error">("idle");
+  const [profileLoaded, setProfileLoaded] = useState(false);
+
+  // Load vet profile from localStorage
+  useEffect(() => {
+    const name = localStorage.getItem("pawcure-vet-name") ?? "";
+    const license = localStorage.getItem("pawcure-vet-license") ?? "";
+    if (name || license) {
+      setForm((prev) => ({ ...prev, veterinario: name, cedula: license }));
+      setProfileLoaded(true);
+    }
+  }, []);
 
   // Patient lookup state
   const [patients, setPatients] = useState<PatientOption[]>([]);
@@ -289,6 +300,32 @@ export default function RecetasPage() {
           <legend className="px-2 text-xs font-bold uppercase tracking-wider text-primary">
             {p.professionalSection}
           </legend>
+
+          {profileLoaded ? (
+            <div className="mb-5 flex items-center gap-2 rounded-xl bg-primary/8 px-3 py-2.5">
+              <Stethoscope className="h-3.5 w-3.5 text-primary flex-shrink-0" strokeWidth={2} />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-foreground truncate">{form.veterinario}</p>
+                {form.cedula && <p className="text-xs text-muted truncate">{form.cedula}</p>}
+              </div>
+              <span className="text-xs text-primary/70 flex-shrink-0">{p.fromProfile}</span>
+            </div>
+          ) : (
+            <div className="mb-5 rounded-xl border border-dashed border-border bg-background px-3 py-2.5 text-center">
+              <p className="text-xs text-muted">{p.profileNotSet}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.querySelector<HTMLButtonElement>("[data-profile-trigger]");
+                  el?.click();
+                }}
+                className="mt-1 text-xs font-medium text-primary hover:underline"
+              >
+                {p.configureProfile}
+              </button>
+            </div>
+          )}
+
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="veterinario" className="mb-1.5 block text-sm font-semibold text-foreground">

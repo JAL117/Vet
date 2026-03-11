@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Settings, Sun, Moon, Globe, Check, LogOut, User } from "lucide-react";
+import { Settings, Sun, Moon, Globe, Check, LogOut, User, Stethoscope } from "lucide-react";
 import { useLanguage, type Lang } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -31,10 +31,39 @@ interface ProfilePanelProps {
   sidebar?: boolean;
 }
 
+function useVetProfile() {
+  const [vetName, setVetNameState] = useState("");
+  const [vetLicense, setVetLicenseState] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setVetNameState(localStorage.getItem("pawcure-vet-name") ?? "");
+    setVetLicenseState(localStorage.getItem("pawcure-vet-license") ?? "");
+  }, []);
+
+  function setVetName(v: string) {
+    setVetNameState(v);
+    setSaved(false);
+  }
+  function setVetLicense(v: string) {
+    setVetLicenseState(v);
+    setSaved(false);
+  }
+  function save() {
+    localStorage.setItem("pawcure-vet-name", vetName);
+    localStorage.setItem("pawcure-vet-license", vetLicense);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
+  return { vetName, setVetName, vetLicense, setVetLicense, save, saved };
+}
+
 export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
   const { lang, setLang, t } = useLanguage();
   const { dark, set: setDark, mounted } = useTheme();
   const { user, signOut } = useAuth();
+  const { vetName, setVetName, vetLicense, setVetLicense, save: saveVet, saved: vetSaved } = useVetProfile();
   const [open, setOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -79,6 +108,45 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
       </div>
 
       <div className="p-3 space-y-4">
+        {/* Professional data */}
+        <div>
+          <div className="mb-2 flex items-center gap-1.5 px-1">
+            <Stethoscope className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted">{t.nav.professional}</span>
+          </div>
+          <div className="space-y-2">
+            <input
+              type="text"
+              value={vetName}
+              onChange={(e) => setVetName(e.target.value)}
+              placeholder={t.nav.vetNamePlaceholder}
+              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+            />
+            <input
+              type="text"
+              value={vetLicense}
+              onChange={(e) => setVetLicense(e.target.value)}
+              placeholder={t.nav.vetLicensePlaceholder}
+              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+            />
+            <button
+              type="button"
+              onClick={saveVet}
+              className={`flex w-full items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${
+                vetSaved
+                  ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400"
+                  : "border-primary/40 bg-primary/8 text-primary hover:bg-primary/15"
+              }`}
+            >
+              {vetSaved ? (
+                <><Check className="h-3 w-3" strokeWidth={2.5} />{t.nav.saved}</>
+              ) : (
+                t.nav.save
+              )}
+            </button>
+          </div>
+        </div>
+
         {/* Language */}
         <div>
           <div className="mb-2 flex items-center gap-1.5 px-1">
@@ -161,6 +229,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
     return (
       <div ref={wrapRef} className="w-full">
         <button
+          data-profile-trigger
           onClick={() => setOpen((v) => !v)}
           className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
             open
@@ -183,6 +252,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
   return (
     <div ref={wrapRef} className="relative">
       <button
+        data-profile-trigger
         onClick={() => setOpen((v) => !v)}
         className={`flex h-9 w-9 items-center justify-center rounded-xl border transition-colors ${
           open
