@@ -8,21 +8,11 @@ import {
   Package,
   Receipt,
   Clock,
-  ChevronRight,
   Stethoscope,
   ArrowRight,
 } from "lucide-react";
-import SearchBar from "@/components/SearchBar";
-import CalcIcon from "@/components/CalcIcon";
 import { categories, getCalculatorsByCategory } from "@/lib/calculators";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-const categoryStyles: Record<string, { bg: string; border: string; iconBg: string; iconColor: string }> = {
-  Emergencias: { bg: "bg-rose-50 dark:bg-rose-950/20", border: "border-rose-200/70 dark:border-rose-800/30", iconBg: "bg-rose-100 dark:bg-rose-900/40", iconColor: "text-rose-600 dark:text-rose-400" },
-  Farmacologia: { bg: "bg-sky-50 dark:bg-sky-950/20", border: "border-sky-200/70 dark:border-sky-800/30", iconBg: "bg-sky-100 dark:bg-sky-900/40", iconColor: "text-sky-600 dark:text-sky-400" },
-  Nutricion: { bg: "bg-emerald-50 dark:bg-emerald-950/20", border: "border-emerald-200/70 dark:border-emerald-800/30", iconBg: "bg-emerald-100 dark:bg-emerald-900/40", iconColor: "text-emerald-600 dark:text-emerald-400" },
-  General: { bg: "bg-violet-50 dark:bg-violet-950/20", border: "border-violet-200/70 dark:border-violet-800/30", iconBg: "bg-violet-100 dark:bg-violet-900/40", iconColor: "text-violet-600 dark:text-violet-400" },
-};
 
 export default function Home() {
   const { t } = useLanguage();
@@ -102,49 +92,6 @@ export default function Home() {
               <p className="mt-1 text-xs text-muted">{h[descKey]}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ── Calculators quick access ─────────────────────────── */}
-      <section>
-        <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted">
-          {h.calculatorsSectionTitle}
-        </h2>
-        <div className="mb-4"><SearchBar /></div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {categories.map((category) => {
-            const calcs = getCalculatorsByCategory(category.name);
-            const style = categoryStyles[category.name] ?? categoryStyles.General;
-            const catName = t.categories[category.name as keyof typeof t.categories] as string;
-            return (
-              <div key={category.name} className={`rounded-2xl border p-5 ${style.bg} ${style.border}`}>
-                <div className="mb-4 flex items-center gap-2.5">
-                  <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${style.iconBg}`}>
-                    <CalcIcon name={category.icon} className={`h-3.5 w-3.5 ${style.iconColor}`} strokeWidth={2.5} />
-                  </div>
-                  <span className={`text-sm font-bold ${style.iconColor}`}>{catName}</span>
-                  <span className="ml-auto text-xs text-muted">{h.tools(calcs.length)}</span>
-                </div>
-                <ul className="space-y-0.5">
-                  {calcs.map((calc) => {
-                    const meta = t.calculatorMeta[calc.id as keyof typeof t.calculatorMeta];
-                    return (
-                      <li key={calc.id}>
-                        <Link
-                          href={calc.path}
-                          className="group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all hover:bg-white/60 dark:hover:bg-white/6 active:scale-[0.98]"
-                        >
-                          <CalcIcon name={calc.icon} className={`h-4 w-4 flex-shrink-0 ${style.iconColor} opacity-80`} strokeWidth={2} />
-                          <span className="flex-1 text-sm font-medium text-foreground leading-snug">{meta?.name ?? calc.name}</span>
-                          <ChevronRight className={`h-3.5 w-3.5 flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity ${style.iconColor}`} strokeWidth={2.5} />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
         </div>
       </section>
 
