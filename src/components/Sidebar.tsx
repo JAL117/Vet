@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Calculator, BookOpen, FileText, ChevronRight, PawPrint, CalendarDays, Package, Receipt } from "lucide-react";
+import { Home, Calculator, ClipboardList, BookOpen, ChevronRight, PawPrint, CalendarDays, Package, Receipt } from "lucide-react";
 import { categories, getCalculatorsByCategory, type CalculatorCategory } from "@/lib/calculators";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CalcIcon from "./CalcIcon";
@@ -30,16 +30,15 @@ export default function Sidebar() {
     exact ? pathname === href : pathname.startsWith(href);
 
   const mobileNavItems = [
-    { href: "/",            label: t.nav.home,      Icon: Home,       exact: true  },
-    { href: "/calculadoras",label: t.nav.calculate, Icon: Calculator, exact: false },
-    { href: "/referencia",  label: t.nav.guide,     Icon: BookOpen,   exact: true  },
-    { href: "/documentos",  label: t.nav.docs,      Icon: FileText,   exact: true  },
+    { href: "/",            label: t.nav.home,      Icon: Home,          exact: true  },
+    { href: "/calculadoras",label: t.nav.calculate, Icon: Calculator,    exact: false },
+    { href: "/recetas",     label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
+    { href: "/referencia",  label: t.nav.guide,     Icon: BookOpen,      exact: true  },
   ];
 
   const mainLinks = [
-    { href: "/",            label: t.nav.home,             Icon: Home     },
-    { href: "/documentos",  label: t.nav.generateDocument, Icon: FileText },
-    { href: "/referencia",  label: t.nav.quickGuide,       Icon: BookOpen },
+    { href: "/",          label: t.nav.home,      Icon: Home     },
+    { href: "/referencia",label: t.nav.quickGuide,Icon: BookOpen },
   ];
 
   const navContent = (
@@ -141,6 +140,23 @@ export default function Sidebar() {
           })}
         </ul>
         )}
+
+        {/* Active module: Recetas */}
+        <ul className="space-y-0.5 mb-1">
+          <li>
+            <Link
+              href="/recetas"
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                pathname === "/recetas" ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+              }`}
+            >
+              <ClipboardList className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
+              <span className="flex-1">{t.nav.recetas}</span>
+            </Link>
+          </li>
+        </ul>
+
+        <div className="my-3 border-t border-border" />
 
         {/* Coming soon modules */}
         <ul className="mt-1 space-y-0.5">

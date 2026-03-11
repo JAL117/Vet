@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   Calculator,
+  ClipboardList,
   PawPrint,
   CalendarDays,
   Package,
@@ -25,6 +26,7 @@ export default function Home() {
     { nameKey: "inventoryModuleName" as const, descKey: "inventoryModuleDesc" as const, Icon: Package },
     { nameKey: "billingModuleName" as const, descKey: "billingModuleDesc" as const, Icon: Receipt },
   ];
+
 
   return (
     <div className="space-y-10">
@@ -54,7 +56,7 @@ export default function Home() {
           {/* Active module: Calculadoras */}
           <Link
             href="/calculadoras"
-            className="group relative col-span-full sm:col-span-2 lg:col-span-1 flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
+            className="group flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
           >
             <div className="mb-3 flex items-center justify-between">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
@@ -69,6 +71,27 @@ export default function Home() {
             <p className="mt-1 text-xs text-muted/70">{h.tools(totalCalcs)}</p>
             <div className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-primary">
               {h.calculatorsModuleOpen}
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
+            </div>
+          </Link>
+
+          {/* Active module: Recetas */}
+          <Link
+            href="/recetas"
+            className="group flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
+                <ClipboardList className="h-5 w-5 text-primary" strokeWidth={2} />
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">
+                {h.available}
+              </span>
+            </div>
+            <p className="text-base font-bold text-foreground leading-snug">{h.recetasModuleName}</p>
+            <p className="mt-1 text-sm text-muted">{h.recetasModuleDesc}</p>
+            <div className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {h.recetasModuleOpen}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
             </div>
           </Link>
