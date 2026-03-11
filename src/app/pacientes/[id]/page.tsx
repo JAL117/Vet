@@ -5,11 +5,13 @@ export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Edit2, Trash2 } from "lucide-react";
+import { ArrowLeft, CalendarDays, Edit2, Plus, Stethoscope, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Patient, formatAge } from "@/types/patient";
+import { ClinicalRecord, formatDate } from "@/types/clinicalRecord";
 import { useLanguage } from "@/contexts/LanguageContext";
 import PatientDetailSkeleton from "@/components/patients/PatientDetailSkeleton";
+import ClinicalRecordSkeleton from "@/components/patients/ClinicalRecordSkeleton";
 
 const SPECIES_EMOJI: Record<string, string> = {
   perro: "🐶",
@@ -39,6 +41,8 @@ export default function PatientDetailPage() {
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [recentRecords, setRecentRecords] = useState<ClinicalRecord[]>([]);
+  const [recordsLoading, setRecordsLoading] = useState(true);
 
   useEffect(() => {
     const supabase = createClient();
@@ -52,6 +56,21 @@ export default function PatientDetailPage() {
       setLoading(false);
     }
     load();
+  }, [id]);
+
+  useEffect(() => {
+    const supabase = createClient();
+    async function loadRecords() {
+      const { data } = await supabase
+        .from("clinical_records")
+        .select("*")
+        .eq("patient_id", id)
+        .order("date", { ascending: false })
+        .limit(3);
+      setRecentRecords(data ?? []);
+      setRecordsLoading(false);
+    }
+    loadRecords();
   }, [id]);
 
   async function handleDelete() {
@@ -153,6 +172,65 @@ export default function PatientDetailPage() {
       <p className="text-xs text-muted text-right">
         {p.registeredOn} {new Date(patient.created_at).toLocaleDateString()}
       </p>
+
+      {/* Historial Clínico section */}
+      <div className="rounded-2xl border border-border bg-surface p-5 space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
+              <Stethoscope className="h-4 w-4 text-primary" strokeWidth={2} />
+            </div>
+            <p className="text-sm font-semibold text-foreground">{t.pages.historial.title}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/pacientes/${id}/historial`}
+              className="text-xs text-primary hover:underline font-medium"
+            >
+              {t.pages.historial.viewAll}
+            </Link>
+            <Link
+              href={`/pacientes/${id}/historial/nuevo`}
+              className="flex items-center gap-1.5 rounded-xl border border-border bg-surface-hover px-2.5 py-1.5 text-xs font-medium text-foreground transition-all hover:border-primary/40 hover:text-primary"
+            >
+              <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
+              {t.pages.historial.newRecord}
+            </Link>
+          </div>
+        </div>
+
+        {recordsLoading ? (
+          <ClinicalRecordSkeleton count={3} />
+        ) : recentRecords.length === 0 ? (
+          <div className="py-4 text-center">
+            <p className="text-sm text-muted">{t.pages.historial.empty}</p>
+            <p className="mt-0.5 text-xs text-muted/70">{t.pages.historial.emptySubtitle}</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {recentRecords.map((record) => (
+              <Link
+                key={record.id}
+                href={`/pacientes/${id}/historial/${record.id}`}
+                className="block rounded-xl border border-border bg-background p-3 transition-all hover:border-primary/30"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-1.5 rounded-full bg-primary/8 px-2 py-0.5 flex-shrink-0">
+                    <CalendarDays className="h-3 w-3 text-primary" strokeWidth={2} />
+                    <span className="text-xs font-semibold text-primary">{formatDate(record.date)}</span>
+                  </div>
+                  {record.reason && (
+                    <p className="text-xs font-medium text-foreground line-clamp-1">{record.reason}</p>
+                  )}
+                </div>
+                {record.diagnosis && (
+                  <p className="mt-1 text-xs text-muted line-clamp-1 pl-1">{record.diagnosis}</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="rounded-2xl border border-red-200 bg-red-50/50 p-5 dark:border-red-800/30 dark:bg-red-900/10">
         <p className="text-xs font-semibold uppercase tracking-wider text-red-600/70 dark:text-red-400/70 mb-3">{p.dangerZone}</p>
