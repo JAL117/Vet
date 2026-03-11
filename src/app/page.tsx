@@ -20,7 +20,6 @@ export default function Home() {
   const totalCalcs = categories.reduce((acc, cat) => acc + getCalculatorsByCategory(cat.name).length, 0);
 
   const comingSoonModules = [
-    { nameKey: "patientsModuleName" as const, descKey: "patientsModuleDesc" as const, Icon: PawPrint },
     { nameKey: "agendaModuleName" as const, descKey: "agendaModuleDesc" as const, Icon: CalendarDays },
     { nameKey: "inventoryModuleName" as const, descKey: "inventoryModuleDesc" as const, Icon: Package },
     { nameKey: "billingModuleName" as const, descKey: "billingModuleDesc" as const, Icon: Receipt },
@@ -75,6 +74,27 @@ export default function Home() {
             <p className="mt-1 text-sm text-muted">{h.recetasModuleDesc}</p>
             <div className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-primary">
               {h.recetasModuleOpen}
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
+            </div>
+          </Link>
+
+          {/* Active module: Pacientes */}
+          <Link
+            href="/pacientes"
+            className="group flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
+                <PawPrint className="h-5 w-5 text-primary" strokeWidth={2} />
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">
+                {h.available}
+              </span>
+            </div>
+            <p className="text-base font-bold text-foreground leading-snug">{h.patientsModuleName}</p>
+            <p className="mt-1 text-sm text-muted">{h.patientsModuleDesc}</p>
+            <div className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-primary">
+              {h.patientsModuleOpen}
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
             </div>
           </Link>

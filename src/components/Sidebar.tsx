@@ -40,6 +40,7 @@ export default function Sidebar() {
     { href: "/",             label: t.nav.home,      Icon: Home,          exact: true  },
     { href: "/calculadoras", label: t.nav.calculate, Icon: Calculator,    exact: false },
     { href: "/recetas",      label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
+    { href: "/pacientes",    label: t.nav.patients,  Icon: PawPrint,      exact: false },
     { href: "/referencia",   label: t.nav.guide,     Icon: BookOpen,      exact: true  },
   ];
 
@@ -47,6 +48,7 @@ export default function Sidebar() {
     { href: "/",             label: t.nav.home,      Icon: Home,          exact: true  },
     { href: "/calculadoras", label: t.nav.calculate, Icon: Calculator,    exact: false },
     { href: "/recetas",      label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
+    { href: "/pacientes",    label: t.nav.patients,  Icon: PawPrint,      exact: false },
     { href: "/referencia",   label: t.nav.guide,     Icon: BookOpen,      exact: true  },
   ];
 
@@ -172,10 +174,24 @@ export default function Sidebar() {
 
         <div className="my-3 border-t border-border" />
 
+        {/* Module: Pacientes */}
+        <ul className="mt-0.5 space-y-0.5">
+          <li>
+            <Link
+              href="/pacientes"
+              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                pathname.startsWith("/pacientes") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+              }`}
+            >
+              <PawPrint className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
+              <span className="flex-1">{t.nav.patients}</span>
+            </Link>
+          </li>
+        </ul>
+
         {/* Coming soon */}
-        <ul className="space-y-0.5">
+        <ul className="space-y-0.5 mt-0.5">
           {[
-            { Icon: PawPrint,     label: t.home.patientsModuleName  },
             { Icon: CalendarDays, label: t.home.agendaModuleName    },
             { Icon: Package,      label: t.home.inventoryModuleName },
             { Icon: Receipt,      label: t.home.billingModuleName   },
