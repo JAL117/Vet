@@ -2,9 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { calculators, type Calculator } from "@/lib/calculators";
+import { useLanguage } from "@/contexts/LanguageContext";
+import CalcIcon from "./CalcIcon";
 
 export default function SearchBar() {
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Calculator[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -12,10 +16,7 @@ export default function SearchBar() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
@@ -25,88 +26,70 @@ export default function SearchBar() {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    if (value.trim().length === 0) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
+    if (value.trim().length === 0) { setResults([]); setIsOpen(false); return; }
     const normalized = value.toLowerCase().trim();
-    const filtered = calculators.filter(
-      (calc) =>
-        calc.name.toLowerCase().includes(normalized) ||
-        calc.description.toLowerCase().includes(normalized) ||
-        calc.category.toLowerCase().includes(normalized)
-    );
+    const filtered = calculators.filter((calc) => {
+      const meta = t.calculatorMeta[calc.id as keyof typeof t.calculatorMeta];
+      const name = meta?.name ?? calc.name;
+      const desc = meta?.description ?? calc.description;
+      const cat = t.categories[calc.category as keyof typeof t.categories] as string;
+      return (
+        name.toLowerCase().includes(normalized) ||
+        desc.toLowerCase().includes(normalized) ||
+        cat.toLowerCase().includes(normalized)
+      );
+    });
     setResults(filtered);
     setIsOpen(true);
   };
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-xl">
+    <div ref={containerRef} className="relative w-full">
       <div className="relative">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
+        <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" strokeWidth={2} />
         <input
           type="text"
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => query.trim() && setIsOpen(true)}
-          placeholder="Buscar calculadora..."
-          className="w-full rounded-xl border border-border bg-surface py-3 pl-11 pr-4 text-lg text-foreground placeholder:text-muted shadow-sm transition-all focus:border-primary focus:shadow-md focus:ring-0"
-          aria-label="Buscar calculadoras"
-          aria-expanded={isOpen}
+          placeholder={t.search.placeholder}
+          className="w-full rounded-2xl border border-border bg-surface py-3 pl-10 pr-4 text-base text-foreground placeholder:text-muted shadow-sm transition-all focus:border-primary focus:shadow-[0_0_0_3px_rgba(13,148,136,0.12)] focus:ring-0"
+          aria-label={t.search.placeholder}
           role="combobox"
-          aria-controls="search-results"
+          aria-expanded={isOpen}
         />
       </div>
 
       {isOpen && results.length > 0 && (
-        <ul
-          id="search-results"
-          role="listbox"
-          className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-border bg-surface shadow-lg"
-        >
-          {results.map((calc) => (
-            <li key={calc.id} role="option">
-              <Link
-                href={calc.path}
-                onClick={() => {
-                  setIsOpen(false);
-                  setQuery("");
-                }}
-                className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-hover"
-              >
-                <span className="text-2xl" aria-hidden="true">
-                  {calc.icon}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-foreground truncate">
-                    {calc.name}
-                  </p>
-                  <p className="text-sm text-muted truncate">
-                    {calc.category} &mdash; {calc.description}
-                  </p>
-                </div>
-              </Link>
-            </li>
-          ))}
+        <ul role="listbox" className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-border bg-surface shadow-xl shadow-black/5">
+          {results.map((calc) => {
+            const meta = t.calculatorMeta[calc.id as keyof typeof t.calculatorMeta];
+            const catLabel = t.categories[calc.category as keyof typeof t.categories] as string;
+            return (
+              <li key={calc.id} role="option">
+                <Link
+                  href={calc.path}
+                  onClick={() => { setIsOpen(false); setQuery(""); }}
+                  className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-surface-hover"
+                >
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                    <CalcIcon name={calc.icon} className="h-4 w-4 text-primary" strokeWidth={2} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">{meta?.name ?? calc.name}</p>
+                    <p className="text-xs text-muted truncate">{catLabel}</p>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
 
       {isOpen && query.trim() && results.length === 0 && (
-        <div className="absolute z-50 mt-2 w-full rounded-xl border border-border bg-surface p-4 text-center text-muted shadow-lg">
-          No se encontraron calculadoras para &ldquo;{query}&rdquo;
+        <div className="absolute z-50 mt-2 w-full rounded-2xl border border-border bg-surface p-5 text-center shadow-xl shadow-black/5">
+          <Search className="mx-auto mb-2 h-8 w-8 text-muted/40" strokeWidth={1.5} />
+          <p className="text-sm text-muted">{t.search.noResults} &ldquo;{query}&rdquo;</p>
         </div>
       )}
     </div>
