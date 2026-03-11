@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Settings, Sun, Moon, Globe, Check } from "lucide-react";
+import { Settings, Sun, Moon, Globe, Check, LogOut, User } from "lucide-react";
 import { useLanguage, type Lang } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 function useTheme() {
   const [dark, setDark] = useState(false);
@@ -33,8 +34,15 @@ interface ProfilePanelProps {
 export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
   const { lang, setLang, t } = useLanguage();
   const { dark, set: setDark, mounted } = useTheme();
+  const { user, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    await signOut();
+  };
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -57,14 +65,16 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
           : "absolute right-0 top-full mt-2 origin-top-right"
       }`}
     >
-      {/* Header */}
+      {/* Header — user info */}
       <div className="flex items-center gap-2.5 border-b border-border px-4 py-3.5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10">
-          <Settings className="h-4 w-4 text-primary" strokeWidth={2} />
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
+          <User className="h-4 w-4 text-primary" strokeWidth={2} />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground">{t.nav.settings}</p>
-          <p className="text-xs text-muted">{t.nav.vetTool}</p>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-foreground">
+            {user?.user_metadata?.full_name || t.auth.user.account}
+          </p>
+          <p className="truncate text-xs text-muted">{user?.email}</p>
         </div>
       </div>
 
@@ -127,8 +137,20 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
         )}
       </div>
 
+      {/* Sign out */}
+      <div className="border-t border-border px-3 py-2.5">
+        <button
+          onClick={handleSignOut}
+          disabled={signingOut}
+          className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-danger transition-colors hover:bg-danger/8 disabled:opacity-60"
+        >
+          <LogOut className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
+          <span>{signingOut ? t.auth.user.signingOut : t.auth.user.signOut}</span>
+        </button>
+      </div>
+
       {/* Footer */}
-      <div className="border-t border-border px-4 py-2.5 text-center">
+      <div className="border-t border-border px-4 py-2 text-center">
         <p className="text-[10px] text-muted/60">{t.nav.appVersion}</p>
       </div>
     </div>
