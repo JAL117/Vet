@@ -9,8 +9,8 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PawCure - Calculadora Veterinaria",
-  description: "Herramientas de cálculo clínico para profesionales veterinarios. Dosis, fluidoterapia, nutrición y más.",
+  title: "PawCure - Plataforma Veterinaria",
+  description: "Plataforma completa para clínicas veterinarias. Calculadoras clínicas, gestión de pacientes, agenda, inventario y más.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

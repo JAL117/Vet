@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Calculator, BookOpen, FileText, ChevronRight } from "lucide-react";
+import { Home, Calculator, BookOpen, FileText, ChevronRight, PawPrint, CalendarDays, Package, Receipt } from "lucide-react";
 import { categories, getCalculatorsByCategory, type CalculatorCategory } from "@/lib/calculators";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CalcIcon from "./CalcIcon";
@@ -76,9 +76,31 @@ export default function Sidebar() {
         <div className="my-4 border-t border-border" />
 
         <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-muted">
-          {t.nav.calculators}
+          {t.nav.modules}
         </p>
-        <ul className="space-y-0.5">
+
+        {/* Active module: Calculadoras */}
+        <ul className="space-y-0.5 mb-1">
+          <li>
+            <button
+              onClick={() => toggleCategory("Emergencias")}
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                pathname.startsWith("/calculadoras") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+              }`}
+            >
+              <Calculator className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
+              <span className="flex-1 text-left">{t.nav.calculators}</span>
+              <ChevronRight
+                className={`h-3.5 w-3.5 text-muted transition-transform ${pathname.startsWith("/calculadoras") ? "rotate-90" : ""}`}
+                strokeWidth={2.5}
+              />
+            </button>
+          </li>
+        </ul>
+
+        {/* Calculator subcategories */}
+        {pathname.startsWith("/calculadoras") && (
+        <ul className="space-y-0.5 ml-4 mb-2 border-l border-border pl-3">
           {categories.map((category) => {
             const calcs = getCalculatorsByCategory(category.name);
             const isExpanded = expandedCategories.has(category.name);
@@ -117,6 +139,27 @@ export default function Sidebar() {
               </li>
             );
           })}
+        </ul>
+        )}
+
+        {/* Coming soon modules */}
+        <ul className="mt-1 space-y-0.5">
+          {[
+            { Icon: PawPrint,    label: t.home.patientsModuleName  },
+            { Icon: CalendarDays, label: t.home.agendaModuleName    },
+            { Icon: Package,     label: t.home.inventoryModuleName  },
+            { Icon: Receipt,     label: t.home.billingModuleName    },
+          ].map(({ Icon, label }) => (
+            <li key={label}>
+              <div className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted/50 cursor-default select-none">
+                <Icon className="h-4 w-4 flex-shrink-0" strokeWidth={1.8} />
+                <span className="flex-1">{label}</span>
+                <span className="text-[9px] font-bold uppercase tracking-wide bg-foreground/6 text-muted/60 px-1.5 py-0.5 rounded-md">
+                  {t.home.comingSoon}
+                </span>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
 
