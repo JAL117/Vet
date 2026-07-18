@@ -2,7 +2,7 @@ export interface ClinicalRecord {
   id: string;
   patient_id: string;
   user_id: string;
-  date: string; // ISO date 'YYYY-MM-DD'
+  date: string; // Fecha ISO 'YYYY-MM-DD'
   reason: string | null;
   weight_kg: number | null;
   temperature: number | null;
@@ -16,8 +16,8 @@ export interface ClinicalRecord {
 export interface ClinicalRecordFormData {
   date: string;
   reason: string;
-  weight_kg: string; // string for <input>, converted on submit
-  temperature: string; // string for <input>, converted on submit
+  weight_kg: string; // string para <input>, se convierte al enviar
+  temperature: string; // string para <input>, se convierte al enviar
   diagnosis: string;
   treatment: string;
   notes: string;

@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
-      {/* Branding */}
+      {/* Marca */}
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 shadow-sm">
           <Stethoscope className="h-7 w-7 text-primary" strokeWidth={1.8} />
@@ -56,7 +56,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Card */}
+      {/* Tarjeta */}
       <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 shadow-lg sm:p-8">
         <div className="mb-6">
           <h2 className="text-xl font-bold text-foreground">{a.login.title}</h2>
@@ -64,7 +64,7 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
+          {/* Correo electrónico */}
           <div>
             <label className="mb-1.5 block text-sm font-semibold text-foreground">
               {a.login.email}
@@ -83,7 +83,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Password */}
+          {/* Contraseña */}
           <div>
             <label className="mb-1.5 block text-sm font-semibold text-foreground">
               {a.login.password}
@@ -122,7 +122,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Submit */}
+          {/* Enviar */}
           <button
             type="submit"
             disabled={loading}
@@ -142,16 +142,16 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Footer link */}
+        {/* Enlace de pie */}
         <p className="mt-5 text-center text-sm text-muted">
           {a.login.noAccount}{" "}
-          <Link href="/auth/registro" className="font-semibold text-primary hover:underline">
+          <Link href="/auth/register" className="font-semibold text-primary hover:underline">
             {a.login.register}
           </Link>
         </p>
       </div>
 
-      {/* App version */}
+      {/* Versión de la app */}
       <p className="mt-6 text-xs text-muted/60">PawCure · v0.1.0</p>
     </div>
   );

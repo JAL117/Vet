@@ -29,15 +29,15 @@ export default function Home() {
   return (
     <div className="space-y-10">
 
-      {/* ── Platform Modules ─────────────────────────────────── */}
+      {/* ── Módulos de la plataforma ─────────────────────────── */}
       <section>
         <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted">
           {h.modulesTitle}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Active module: Calculadoras */}
+          {/* Módulo activo: Calculadoras */}
           <Link
-            href="/calculadoras"
+            href="/calculators"
             className="group flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
           >
             <div className="mb-3 flex items-center justify-between">
@@ -57,9 +57,9 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Active module: Recetas */}
+          {/* Módulo activo: Recetas */}
           <Link
-            href="/recetas"
+            href="/prescriptions"
             className="group flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
           >
             <div className="mb-3 flex items-center justify-between">
@@ -80,7 +80,7 @@ export default function Home() {
 
           {/* Active module: Pacientes */}
           <Link
-            href="/pacientes"
+            href="/patients"
             className="group flex flex-col rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 transition-all hover:border-primary/60 hover:bg-primary/8 hover:shadow-md active:scale-[0.99]"
           >
             <div className="mb-3 flex items-center justify-between">
@@ -99,7 +99,7 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Coming soon modules */}
+          {/* Módulos próximamente */}
           {comingSoonModules.map(({ nameKey, descKey, Icon }) => (
             <div
               key={nameKey}

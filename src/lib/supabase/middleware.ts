@@ -25,7 +25,7 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // IMPORTANT: do not add logic between createServerClient and getUser()
+  // IMPORTANTE: no agregar lógica entre createServerClient y getUser()
   const {
     data: { user },
   } = await supabase.auth.getUser();

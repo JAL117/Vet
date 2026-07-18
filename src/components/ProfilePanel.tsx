@@ -37,7 +37,7 @@ function useVetProfile() {
   const [vetLicense, setVetLicenseState] = useState("");
   const [saved, setSaved] = useState(false);
 
-  // On mount: load from localStorage cache first, then sync from Supabase
+  // Al montar: carga primero desde el caché de localStorage y luego sincroniza desde Supabase
   useEffect(() => {
     setVetNameState(localStorage.getItem("pawcure-vet-name") ?? "");
     setVetLicenseState(localStorage.getItem("pawcure-vet-license") ?? "");
@@ -125,7 +125,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
           : "absolute right-0 top-full mt-2 origin-top-right"
       }`}
     >
-      {/* Header — user info */}
+      {/* Encabezado — información del usuario */}
       <div className="flex items-center gap-2.5 border-b border-border px-4 py-3.5">
         <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
           <User className="h-4 w-4 text-primary" strokeWidth={2} />
@@ -139,7 +139,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
       </div>
 
       <div className="p-3 space-y-4">
-        {/* Professional data */}
+        {/* Datos profesionales */}
         <div>
           <div className="mb-2 flex items-center gap-1.5 px-1">
             <Stethoscope className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
@@ -178,7 +178,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
           </div>
         </div>
 
-        {/* Language */}
+        {/* Idioma */}
         <div>
           <div className="mb-2 flex items-center gap-1.5 px-1">
             <Globe className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
@@ -205,7 +205,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
           </div>
         </div>
 
-        {/* Appearance */}
+        {/* Apariencia */}
         {mounted && (
           <div>
             <div className="mb-2 flex items-center gap-1.5 px-1">
@@ -236,7 +236,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
         )}
       </div>
 
-      {/* Sign out */}
+      {/* Cerrar sesión */}
       <div className="border-t border-border px-3 py-2.5">
         <button
           onClick={handleSignOut}
@@ -248,14 +248,14 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
         </button>
       </div>
 
-      {/* Footer */}
+      {/* Pie de página */}
       <div className="border-t border-border px-4 py-2 text-center">
         <p className="text-[10px] text-muted/60">{t.nav.appVersion}</p>
       </div>
     </div>
   );
 
-  /* ── Sidebar variant: full-width button + dropdown below ──────────────── */
+  /* ── Variante sidebar: botón de ancho completo + dropdown debajo ──────── */
   if (sidebar) {
     return (
       <div ref={wrapRef} className="w-full">
@@ -279,7 +279,7 @@ export default function ProfilePanel({ sidebar = false }: ProfilePanelProps) {
     );
   }
 
-  /* ── Mobile header variant: icon button + dropdown ────────────────────── */
+  /* ── Variante encabezado móvil: botón de icono + dropdown ─────────────── */
   return (
     <div ref={wrapRef} className="relative">
       <button

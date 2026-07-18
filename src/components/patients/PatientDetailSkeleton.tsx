@@ -3,10 +3,10 @@ import { Skeleton } from "@/components/ui/Skeleton";
 export default function PatientDetailSkeleton() {
   return (
     <div className="space-y-6">
-      {/* Back link */}
+      {/* Enlace de regreso */}
       <Skeleton className="h-3.5 w-32" />
 
-      {/* Header */}
+      {/* Encabezado */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <Skeleton className="h-12 w-12 rounded-2xl flex-shrink-0" />
@@ -18,13 +18,13 @@ export default function PatientDetailSkeleton() {
         <Skeleton className="h-9 w-24 rounded-xl flex-shrink-0" />
       </div>
 
-      {/* Info card */}
+      {/* Tarjeta de información */}
       <InfoCardSkeleton rows={9} />
 
-      {/* Owner card */}
+      {/* Tarjeta del propietario */}
       <InfoCardSkeleton rows={4} />
 
-      {/* Clinical card */}
+      {/* Tarjeta clínica */}
       <InfoCardSkeleton rows={2} />
     </div>
   );

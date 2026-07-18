@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 
-const FULL_SIDEBAR_ROUTES = ["/", "/referencia"];
+const FULL_SIDEBAR_ROUTES = ["/", "/reference"];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
