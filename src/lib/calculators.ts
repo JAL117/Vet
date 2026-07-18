@@ -1,7 +1,7 @@
 export type CalculatorCategory =
-  | "Emergencias"
-  | "Farmacologia"
-  | "Nutricion"
+  | "Emergency"
+  | "Pharmacology"
+  | "Nutrition"
   | "General";
 
 export interface Calculator {
@@ -10,28 +10,28 @@ export interface Calculator {
   description: string;
   category: CalculatorCategory;
   path: string;
-  icon: string; // Lucide icon name
+  icon: string; // Nombre del ícono de Lucide
 }
 
 export interface CategoryInfo {
   name: CalculatorCategory;
-  icon: string; // Lucide icon name
+  icon: string; // Nombre del ícono de Lucide
   description: string;
 }
 
 export const categories: CategoryInfo[] = [
   {
-    name: "Emergencias",
+    name: "Emergency",
     icon: "alert-circle",
     description: "Calculadoras para situaciones de emergencia veterinaria",
   },
   {
-    name: "Farmacologia",
+    name: "Pharmacology",
     icon: "pill",
     description: "Dosificacion y administracion de farmacos",
   },
   {
-    name: "Nutricion",
+    name: "Nutrition",
     icon: "apple",
     description: "Requerimientos nutricionales y condicion corporal",
   },
@@ -44,83 +44,83 @@ export const categories: CategoryInfo[] = [
 
 export const calculators: Calculator[] = [
   {
-    id: "dosis-peso",
+    id: "dose-by-weight",
     name: "Dosis por Peso",
     description: "Calcula la dosis de medicamento segun el peso del paciente",
-    category: "Farmacologia",
-    path: "/calculadoras/dosis-peso",
+    category: "Pharmacology",
+    path: "/calculators/dose-by-weight",
     icon: "scale",
   },
   {
-    id: "fluidoterapia",
+    id: "fluid-therapy",
     name: "Fluidoterapia",
     description: "Calcula tasas de fluidos intravenosos para rehidratacion y mantenimiento",
-    category: "Emergencias",
-    path: "/calculadoras/fluidoterapia",
+    category: "Emergency",
+    path: "/calculators/fluid-therapy",
     icon: "droplets",
   },
   {
     id: "transfusion",
     name: "Transfusion Sanguinea",
     description: "Calcula el volumen necesario de sangre o hemoderivados para transfusion",
-    category: "Emergencias",
-    path: "/calculadoras/transfusion",
+    category: "Emergency",
+    path: "/calculators/transfusion",
     icon: "heart-pulse",
   },
   {
-    id: "superficie-corporal",
+    id: "body-surface-area",
     name: "Superficie Corporal",
     description: "Calcula la superficie corporal para dosificacion quimioterapica",
-    category: "Farmacologia",
-    path: "/calculadoras/superficie-corporal",
+    category: "Pharmacology",
+    path: "/calculators/body-surface-area",
     icon: "scan-line",
   },
   {
-    id: "infusiones-cri",
+    id: "cri-infusions",
     name: "Infusiones Continuas (CRI)",
     description: "Calcula tasas de infusion continua para farmacos intravenosos",
-    category: "Farmacologia",
-    path: "/calculadoras/infusiones-cri",
+    category: "Pharmacology",
+    path: "/calculators/cri-infusions",
     icon: "syringe",
   },
   {
-    id: "nutricion",
+    id: "nutrition",
     name: "Nutricion (RER/DER)",
     description: "Calcula requerimientos energeticos en reposo y diarios",
-    category: "Nutricion",
-    path: "/calculadoras/nutricion",
+    category: "Nutrition",
+    path: "/calculators/nutrition",
     icon: "utensils",
   },
   {
-    id: "glucosa",
+    id: "glucose",
     name: "Conversion de Glucosa",
     description: "Convierte valores de glucosa entre mg/dL y mmol/L",
     category: "General",
-    path: "/calculadoras/glucosa",
+    path: "/calculators/glucose",
     icon: "trending-up",
   },
   {
-    id: "edad-equivalente",
+    id: "age-equivalent",
     name: "Edad Humana Equivalente",
     description: "Estima la edad humana equivalente segun especie y raza",
     category: "General",
-    path: "/calculadoras/edad-equivalente",
+    path: "/calculators/age-equivalent",
     icon: "calendar-clock",
   },
   {
-    id: "condicion-corporal",
+    id: "body-condition",
     name: "Score Condicion Corporal",
     description: "Evalua la condicion corporal del paciente en escala estandarizada",
-    category: "Nutricion",
-    path: "/calculadoras/condicion-corporal",
+    category: "Nutrition",
+    path: "/calculators/body-condition",
     icon: "gauge",
   },
   {
-    id: "gestacion",
+    id: "gestation",
     name: "Tiempo de Gestacion",
     description: "Calcula fechas estimadas de parto segun especie y fecha de monta",
     category: "General",
-    path: "/calculadoras/gestacion",
+    path: "/calculators/gestation",
     icon: "baby",
   },
 ];

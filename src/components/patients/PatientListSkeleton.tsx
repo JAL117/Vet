@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 export default function PatientListSkeleton() {
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Encabezado */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <Skeleton className="h-10 w-10 rounded-xl" />
@@ -15,7 +15,7 @@ export default function PatientListSkeleton() {
         <Skeleton className="h-10 w-10 rounded-xl sm:w-36" />
       </div>
 
-      {/* Search + filter */}
+      {/* Búsqueda + filtro */}
       <div className="space-y-3">
         <Skeleton className="h-10 w-full rounded-xl" />
         <div className="flex gap-2">
@@ -25,7 +25,7 @@ export default function PatientListSkeleton() {
         </div>
       </div>
 
-      {/* List rows */}
+      {/* Filas de la lista */}
       <div className="space-y-2">
         {Array.from({ length: 6 }).map((_, i) => (
           <div

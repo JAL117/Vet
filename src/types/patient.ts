@@ -9,7 +9,7 @@ export interface Patient {
   breed: string | null;
   sex: Sex | null;
   neutered: boolean;
-  birth_date: string | null; // ISO date 'YYYY-MM-DD'
+  birth_date: string | null; // Fecha ISO 'YYYY-MM-DD'
   weight_kg: number | null;
   color: string | null;
   microchip: string | null;
@@ -30,7 +30,7 @@ export interface PatientFormData {
   sex: Sex;
   neutered: boolean;
   birth_date: string;
-  weight_kg: string; // string for <input>, converted on submit
+  weight_kg: string; // string para <input>, se convierte al enviar
   color: string;
   microchip: string;
   owner_name: string;

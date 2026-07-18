@@ -89,26 +89,26 @@ export const es = {
     emergenciesSub: "Fluidoterapia rápida",
   },
   categories: {
-    Emergencias: "Emergencias",
-    Farmacologia: "Farmacología",
-    Nutricion: "Nutrición",
+    Emergency: "Emergencias",
+    Pharmacology: "Farmacología",
+    Nutrition: "Nutrición",
     General: "General",
-    EmergenciasDesc: "Calculadoras para situaciones de emergencia veterinaria",
-    FarmacologiaDesc: "Dosificación y administración de fármacos",
-    NutricionDesc: "Requerimientos nutricionales y condición corporal",
+    EmergencyDesc: "Calculadoras para situaciones de emergencia veterinaria",
+    PharmacologyDesc: "Dosificación y administración de fármacos",
+    NutritionDesc: "Requerimientos nutricionales y condición corporal",
     GeneralDesc: "Herramientas de cálculo general veterinario",
   },
   calculatorMeta: {
-    "fluidoterapia":       { name: "Fluidoterapia",              description: "Calcula tasas de fluidos IV para rehidratación y mantenimiento" },
+    "fluid-therapy":       { name: "Fluidoterapia",              description: "Calcula tasas de fluidos IV para rehidratación y mantenimiento" },
     "transfusion":         { name: "Transfusión Sanguínea",       description: "Calcula el volumen de sangre necesario para transfusión" },
-    "dosis-peso":          { name: "Dosis por Peso",              description: "Calcula la dosis de medicamento según el peso del paciente" },
-    "superficie-corporal": { name: "Superficie Corporal (BSA)",   description: "Calcula superficie corporal para dosificación quimioterápica" },
-    "infusiones-cri":      { name: "Infusiones Continuas (CRI)",  description: "Calcula tasas de infusión continua para fármacos IV" },
-    "nutricion":           { name: "Nutrición (RER/DER)",         description: "Calcula requerimientos energéticos en reposo y diarios" },
-    "condicion-corporal":  { name: "Score Condición Corporal",    description: "Evalúa la condición corporal en escala estandarizada de 9 puntos" },
-    "glucosa":             { name: "Conversión de Glucosa",       description: "Convierte valores de glucosa entre mg/dL y mmol/L" },
-    "edad-equivalente":    { name: "Edad Humana Equivalente",     description: "Estima la edad equivalente en años humanos según especie y tamaño" },
-    "gestacion":           { name: "Tiempo de Gestación",         description: "Calcula fechas estimadas de parto según especie y fecha de monta" },
+    "dose-by-weight":          { name: "Dosis por Peso",              description: "Calcula la dosis de medicamento según el peso del paciente" },
+    "body-surface-area": { name: "Superficie Corporal (BSA)",   description: "Calcula superficie corporal para dosificación quimioterápica" },
+    "cri-infusions":      { name: "Infusiones Continuas (CRI)",  description: "Calcula tasas de infusión continua para fármacos IV" },
+    "nutrition":           { name: "Nutrición (RER/DER)",         description: "Calcula requerimientos energéticos en reposo y diarios" },
+    "body-condition":  { name: "Score Condición Corporal",    description: "Evalúa la condición corporal en escala estandarizada de 9 puntos" },
+    "glucose":             { name: "Conversión de Glucosa",       description: "Convierte valores de glucosa entre mg/dL y mmol/L" },
+    "age-equivalent":    { name: "Edad Humana Equivalente",     description: "Estima la edad equivalente en años humanos según especie y tamaño" },
+    "gestation":           { name: "Tiempo de Gestación",         description: "Calcula fechas estimadas de parto según especie y fecha de monta" },
   },
   search: {
     placeholder: "Buscar calculadora...",
@@ -119,7 +119,7 @@ export const es = {
     alertLabel: "Aviso:",
   },
   pages: {
-    fluidoterapia: {
+    fluidTherapy: {
       title: "Fluidoterapia",
       subtitle: "Calcula los requerimientos de fluidoterapia: mantenimiento, déficit por deshidratación, volumen total en 24 horas y velocidad de goteo.",
       dehydration: "Porcentaje de deshidratación",
@@ -149,7 +149,7 @@ export const es = {
       volumeLabel: "Volumen de sangre entera a transfundir",
       rateNote: "Administrar a velocidad de 0.25 ml/kg/h durante los primeros 15-30 minutos. Si no hay reacciones adversas, aumentar a 5-10 ml/kg/h.",
     },
-    dosisPeso: {
+    doseByWeight: {
       title: "Dosis por Peso",
       subtitle: "Calcula el volumen a administrar de un fármaco según el peso del paciente, la dosis recomendada y la concentración del fármaco.",
       dose: "Dosis recomendada",
@@ -158,7 +158,7 @@ export const es = {
       concentrationError: "Ingrese una concentración válida mayor a 0",
       volumeLabel: "Volumen a administrar",
     },
-    superficieCorporal: {
+    bodySurfaceArea: {
       title: "Superficie Corporal (BSA)",
       subtitle: "Calcula el área de superficie corporal para dosificación de quimioterápicos y otros fármacos basados en m².",
       dogK: "Perro (K = 10.1)",
@@ -168,7 +168,7 @@ export const es = {
       bsa: "Superficie corporal",
       totalDose: "Dosis total",
     },
-    infusionesCri: {
+    criInfusions: {
       title: "Infusiones Continuas (CRI)",
       subtitle: "Calcula la velocidad de infusión continua (Constant Rate Infusion) para fármacos que requieren administración IV constante.",
       dose: "Dosis",
@@ -185,7 +185,7 @@ export const es = {
       drugVolume: "ml del fármaco",
       serumRate: "Velocidad del suero:",
     },
-    nutricion: {
+    nutrition: {
       title: "Nutrición (RER/DER)",
       subtitle: "Calcula los requerimientos energéticos en reposo (RER) y diarios (DER) según la condición del paciente.",
       activityFactor: "Condición / Factor de actividad",
@@ -214,7 +214,7 @@ export const es = {
         { label: "Enfermo hospitalizado (activo)", value: 1.2 },
       ],
     },
-    condicionCorporal: {
+    bodyCondition: {
       title: "Score de Condición Corporal (BCS)",
       subtitle: "Evalúa la condición corporal de tu paciente usando la escala de 9 puntos. Selecciona el score que mejor describe al animal.",
       selectScore: "Selecciona el score (1-9)",
@@ -236,7 +236,7 @@ export const es = {
         { nombre: "Obeso mórbido", descripcion: "Obesidad severa. Riesgo vital. Requiere atención inmediata.", caracteristicas: ["Depósitos masivos de grasa en todo el cuerpo", "Costillas totalmente impalpables", "Grasa abundante en cuello, extremidades y abdomen", "Dificultad para moverse y respirar"], recomendacion: "Atención veterinaria inmediata. Plan de pérdida de peso supervisado. Evaluación de comorbilidades (diabetes, artritis, hepatopatía). Dieta terapéutica estricta. Ejercicio muy gradual." },
       ],
     },
-    glucosa: {
+    glucose: {
       title: "Conversión de Glucosa",
       subtitle: "Convierte valores de glucosa entre mg/dL y mmol/L. Incluye rangos de referencia para perros y gatos.",
       unit: "Unidad de origen",
@@ -253,7 +253,7 @@ export const es = {
       normal: "Normal",
       hyperglycemia: "Hiperglucemia",
     },
-    edadEquivalente: {
+    ageEquivalent: {
       title: "Edad Humana Equivalente",
       subtitle: "Estima la edad equivalente en años humanos según la especie, tamaño y edad del paciente.",
       size: "Tamaño",
@@ -286,7 +286,7 @@ export const es = {
         { label: "Gato", value: "12-18 años" },
       ],
     },
-    gestacion: {
+    gestation: {
       title: "Calculadora de Gestación",
       subtitle: "Calcula la fecha probable de parto, rango de fechas, días transcurridos y trimestre de gestación.",
       dogOption: "Perra (gestación: 63 días, rango 58-68)",
@@ -306,7 +306,7 @@ export const es = {
       overdueWarning: "Se ha superado el rango máximo de gestación. Consultar al veterinario inmediatamente.",
       imminentReminder: "El parto se acerca. Prepare un área tranquila y cómoda. Monitoree temperatura rectal (descenso a <37.8°C indica parto en 24h).",
     },
-    referencia: {
+    reference: {
       title: "Guía Rápida",
       subtitle: "Valores normales y rangos de referencia para perros y gatos",
       searchPlaceholder: "Buscar parámetro, raza, valor...",
@@ -329,7 +329,7 @@ export const es = {
         size: "Tamaño",
       },
     },
-    documentos: {
+    documents: {
       title: "Generador de Receta Veterinaria",
       subtitle: "Complete los datos para generar una receta veterinaria en formato PDF.",
       professionalSection: "Datos del Profesional",
@@ -412,7 +412,7 @@ export const es = {
       section5p2: "Agradecemos especialmente los reportes de errores en fórmulas o valores de referencia, ya que nos ayudan a mejorar la precisión de la herramienta para toda la comunidad veterinaria.",
       footer: "PawCure - Herramienta de apoyo para profesionales veterinarios",
     },
-    pacientes: {
+    patients: {
       title: "Gestión de Pacientes",
       subtitle: "Fichas clínicas y datos de tus pacientes registrados",
       newPatient: "Nuevo paciente",
@@ -494,7 +494,7 @@ export const es = {
       createTitle: "Nuevo paciente",
       createSubtitle: "Completa los datos del nuevo paciente",
     },
-    historial: {
+    history: {
       title: "Historial Clínico",
       subtitle: "Registros de consultas y evolución del paciente",
       newRecord: "Nuevo registro",

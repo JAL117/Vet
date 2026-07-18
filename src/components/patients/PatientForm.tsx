@@ -12,7 +12,7 @@ interface PatientFormProps {
 
 export default function PatientForm({ initialData, onSubmit, isEdit = false }: PatientFormProps) {
   const { t } = useLanguage();
-  const p = t.pages.pacientes;
+  const p = t.pages.patients;
   const [form, setForm] = useState<PatientFormData>(initialData ?? emptyPatientForm);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Patient data */}
+      {/* Datos del paciente */}
       <fieldset className="space-y-5">
         <legend className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">1</span>
@@ -43,7 +43,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
         </legend>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* Name */}
+          {/* Nombre */}
           <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-muted mb-1.5">
               {p.name} <span className="text-primary">*</span>
@@ -58,7 +58,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Species */}
+          {/* Especie */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">
               {p.species} <span className="text-primary">*</span>
@@ -75,7 +75,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             </select>
           </div>
 
-          {/* Breed */}
+          {/* Raza */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.breed}</label>
             <input
@@ -87,7 +87,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Sex */}
+          {/* Sexo */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.sex}</label>
             <select
@@ -101,7 +101,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             </select>
           </div>
 
-          {/* Neutered */}
+          {/* Esterilizado */}
           <div className="flex items-center gap-3 pt-1">
             <button
               type="button"
@@ -128,7 +128,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             </label>
           </div>
 
-          {/* Birth date */}
+          {/* Fecha de nacimiento */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.birthDate}</label>
             <input
@@ -140,7 +140,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Weight */}
+          {/* Peso */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.weightKg}</label>
             <div className="relative">
@@ -185,7 +185,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
 
       <div className="border-t border-border" />
 
-      {/* Owner data */}
+      {/* Datos del propietario */}
       <fieldset className="space-y-5">
         <legend className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">2</span>
@@ -193,7 +193,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
         </legend>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* Owner name */}
+          {/* Nombre del propietario */}
           <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-muted mb-1.5">
               {p.ownerName} <span className="text-primary">*</span>
@@ -208,7 +208,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Phone */}
+          {/* Teléfono */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.ownerPhone}</label>
             <input
@@ -220,7 +220,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Email */}
+          {/* Correo electrónico */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.ownerEmail}</label>
             <input
@@ -232,7 +232,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Address */}
+          {/* Dirección */}
           <div className="sm:col-span-2">
             <label className="block text-xs font-medium text-muted mb-1.5">{p.ownerAddress}</label>
             <input
@@ -248,7 +248,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
 
       <div className="border-t border-border" />
 
-      {/* Clinical info */}
+      {/* Información clínica */}
       <fieldset className="space-y-5">
         <legend className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">3</span>
@@ -256,7 +256,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
         </legend>
 
         <div className="grid grid-cols-1 gap-4">
-          {/* Allergies */}
+          {/* Alergias */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.allergies}</label>
             <input
@@ -268,7 +268,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
             />
           </div>
 
-          {/* Notes */}
+          {/* Notas */}
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">{p.notes}</label>
             <textarea
@@ -289,7 +289,7 @@ export default function PatientForm({ initialData, onSubmit, isEdit = false }: P
         </p>
       )}
 
-      {/* Submit */}
+      {/* Enviar */}
       <div className="flex items-center justify-between pt-2">
         <p className="text-xs text-muted">{p.required}</p>
         <button

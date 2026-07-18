@@ -16,7 +16,7 @@ export default function ClinicalRecordForm({
   isEdit = false,
 }: ClinicalRecordFormProps) {
   const { t } = useLanguage();
-  const h = t.pages.historial;
+  const h = t.pages.history;
   const [form, setForm] = useState<ClinicalRecordFormData>(initialData ?? emptyClinicalRecordForm);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export default function ClinicalRecordForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {/* Date */}
+        {/* Fecha */}
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">
             {h.date} <span className="text-primary">*</span>
@@ -58,7 +58,7 @@ export default function ClinicalRecordForm({
           />
         </div>
 
-        {/* Reason */}
+        {/* Motivo */}
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">{h.reason}</label>
           <input
@@ -70,7 +70,7 @@ export default function ClinicalRecordForm({
           />
         </div>
 
-        {/* Weight */}
+        {/* Peso */}
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">{h.weightKg}</label>
           <div className="relative">
@@ -87,7 +87,7 @@ export default function ClinicalRecordForm({
           </div>
         </div>
 
-        {/* Temperature */}
+        {/* Temperatura */}
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">{h.temperature}</label>
           <div className="relative">
@@ -105,7 +105,7 @@ export default function ClinicalRecordForm({
           </div>
         </div>
 
-        {/* Diagnosis */}
+        {/* Diagnóstico */}
         <div className="sm:col-span-2">
           <label className="block text-xs font-medium text-muted mb-1.5">{h.diagnosis}</label>
           <input
@@ -117,7 +117,7 @@ export default function ClinicalRecordForm({
           />
         </div>
 
-        {/* Treatment */}
+        {/* Tratamiento */}
         <div className="sm:col-span-2">
           <label className="block text-xs font-medium text-muted mb-1.5">{h.treatment}</label>
           <textarea
@@ -129,7 +129,7 @@ export default function ClinicalRecordForm({
           />
         </div>
 
-        {/* Notes */}
+        {/* Notas */}
         <div className="sm:col-span-2">
           <label className="block text-xs font-medium text-muted mb-1.5">{h.notes}</label>
           <textarea
@@ -149,7 +149,7 @@ export default function ClinicalRecordForm({
         </p>
       )}
 
-      {/* Submit */}
+      {/* Enviar */}
       <div className="flex justify-end pt-2">
         <button
           type="submit"

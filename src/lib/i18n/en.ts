@@ -91,26 +91,26 @@ export const en: Translations = {
     emergenciesSub: "Quick fluid therapy",
   },
   categories: {
-    Emergencias: "Emergencies",
-    Farmacologia: "Pharmacology",
-    Nutricion: "Nutrition",
+    Emergency: "Emergencies",
+    Pharmacology: "Pharmacology",
+    Nutrition: "Nutrition",
     General: "General",
-    EmergenciasDesc: "Calculators for veterinary emergency situations",
-    FarmacologiaDesc: "Drug dosing and administration",
-    NutricionDesc: "Nutritional requirements and body condition",
+    EmergencyDesc: "Calculators for veterinary emergency situations",
+    PharmacologyDesc: "Drug dosing and administration",
+    NutritionDesc: "Nutritional requirements and body condition",
     GeneralDesc: "General veterinary calculation tools",
   },
   calculatorMeta: {
-    "fluidoterapia":       { name: "Fluid Therapy",               description: "Calculate IV fluid rates for rehydration and maintenance" },
+    "fluid-therapy":       { name: "Fluid Therapy",               description: "Calculate IV fluid rates for rehydration and maintenance" },
     "transfusion":         { name: "Blood Transfusion",            description: "Calculate the blood volume needed for transfusion" },
-    "dosis-peso":          { name: "Dose by Weight",               description: "Calculate drug dose based on patient weight" },
-    "superficie-corporal": { name: "Body Surface Area (BSA)",      description: "Calculate body surface area for chemotherapy dosing" },
-    "infusiones-cri":      { name: "Constant Rate Infusion (CRI)", description: "Calculate continuous infusion rates for IV drugs" },
-    "nutricion":           { name: "Nutrition (RER/DER)",          description: "Calculate resting and daily energy requirements" },
-    "condicion-corporal":  { name: "Body Condition Score (BCS)",   description: "Assess body condition on the standardized 9-point scale" },
-    "glucosa":             { name: "Glucose Conversion",           description: "Convert glucose values between mg/dL and mmol/L" },
-    "edad-equivalente":    { name: "Equivalent Human Age",         description: "Estimate human-equivalent age by species and size" },
-    "gestacion":           { name: "Gestation Calculator",         description: "Calculate estimated delivery dates by species and mating date" },
+    "dose-by-weight":          { name: "Dose by Weight",               description: "Calculate drug dose based on patient weight" },
+    "body-surface-area": { name: "Body Surface Area (BSA)",      description: "Calculate body surface area for chemotherapy dosing" },
+    "cri-infusions":      { name: "Constant Rate Infusion (CRI)", description: "Calculate continuous infusion rates for IV drugs" },
+    "nutrition":           { name: "Nutrition (RER/DER)",          description: "Calculate resting and daily energy requirements" },
+    "body-condition":  { name: "Body Condition Score (BCS)",   description: "Assess body condition on the standardized 9-point scale" },
+    "glucose":             { name: "Glucose Conversion",           description: "Convert glucose values between mg/dL and mmol/L" },
+    "age-equivalent":    { name: "Equivalent Human Age",         description: "Estimate human-equivalent age by species and size" },
+    "gestation":           { name: "Gestation Calculator",         description: "Calculate estimated delivery dates by species and mating date" },
   },
   search: {
     placeholder: "Search calculator...",
@@ -121,7 +121,7 @@ export const en: Translations = {
     alertLabel: "Notice:",
   },
   pages: {
-    fluidoterapia: {
+    fluidTherapy: {
       title: "Fluid Therapy",
       subtitle: "Calculate fluid therapy requirements: maintenance, dehydration deficit, total 24-hour volume, and drip rate.",
       dehydration: "Dehydration percentage",
@@ -151,7 +151,7 @@ export const en: Translations = {
       volumeLabel: "Whole blood volume to transfuse",
       rateNote: "Administer at 0.25 ml/kg/h for the first 15-30 minutes. If no adverse reactions, increase to 5-10 ml/kg/h.",
     },
-    dosisPeso: {
+    doseByWeight: {
       title: "Dose by Weight",
       subtitle: "Calculate the volume to administer of a drug based on patient weight, recommended dose, and drug concentration.",
       dose: "Recommended dose",
@@ -160,7 +160,7 @@ export const en: Translations = {
       concentrationError: "Enter a valid concentration greater than 0",
       volumeLabel: "Volume to administer",
     },
-    superficieCorporal: {
+    bodySurfaceArea: {
       title: "Body Surface Area (BSA)",
       subtitle: "Calculate body surface area for chemotherapy and other m²-based drug dosing.",
       dogK: "Dog (K = 10.1)",
@@ -170,7 +170,7 @@ export const en: Translations = {
       bsa: "Body surface area",
       totalDose: "Total dose",
     },
-    infusionesCri: {
+    criInfusions: {
       title: "Constant Rate Infusion (CRI)",
       subtitle: "Calculate the constant infusion rate for drugs requiring continuous IV administration.",
       dose: "Dose",
@@ -187,7 +187,7 @@ export const en: Translations = {
       drugVolume: "ml of drug",
       serumRate: "Fluid rate:",
     },
-    nutricion: {
+    nutrition: {
       title: "Nutrition (RER/DER)",
       subtitle: "Calculate resting energy requirements (RER) and daily energy requirements (DER) based on patient condition.",
       activityFactor: "Condition / Activity factor",
@@ -216,7 +216,7 @@ export const en: Translations = {
         { label: "Hospitalized (active)", value: 1.2 },
       ],
     },
-    condicionCorporal: {
+    bodyCondition: {
       title: "Body Condition Score (BCS)",
       subtitle: "Assess your patient's body condition using the 9-point scale. Select the score that best describes the animal.",
       selectScore: "Select score (1-9)",
@@ -238,7 +238,7 @@ export const en: Translations = {
         { nombre: "Morbidly obese", descripcion: "Severe obesity. Life-threatening. Requires immediate attention.", caracteristicas: ["Massive fat deposits throughout the body", "Ribs completely impalpable", "Abundant fat on neck, limbs and abdomen", "Difficulty moving and breathing"], recomendacion: "Immediate veterinary attention. Supervised weight loss plan. Comorbidity assessment (diabetes, arthritis, hepatopathy). Strict therapeutic diet. Very gradual exercise." },
       ],
     },
-    glucosa: {
+    glucose: {
       title: "Glucose Conversion",
       subtitle: "Convert glucose values between mg/dL and mmol/L. Includes reference ranges for dogs and cats.",
       unit: "Source unit",
@@ -255,7 +255,7 @@ export const en: Translations = {
       normal: "Normal",
       hyperglycemia: "Hyperglycemia",
     },
-    edadEquivalente: {
+    ageEquivalent: {
       title: "Equivalent Human Age",
       subtitle: "Estimate the equivalent age in human years based on species, size, and patient age.",
       size: "Size",
@@ -288,7 +288,7 @@ export const en: Translations = {
         { label: "Cat", value: "12-18 years" },
       ],
     },
-    gestacion: {
+    gestation: {
       title: "Gestation Calculator",
       subtitle: "Calculate the probable delivery date, date range, days elapsed, and gestation trimester.",
       dogOption: "Female dog (gestation: 63 days, range 58-68)",
@@ -308,7 +308,7 @@ export const en: Translations = {
       overdueWarning: "Maximum gestation range exceeded. Consult a veterinarian immediately.",
       imminentReminder: "Birth is approaching. Prepare a quiet, comfortable area. Monitor rectal temperature (drop below 37.8°C indicates birth within 24h).",
     },
-    referencia: {
+    reference: {
       title: "Quick Reference",
       subtitle: "Normal values and reference ranges for dogs and cats",
       searchPlaceholder: "Search parameter, breed, value...",
@@ -331,7 +331,7 @@ export const en: Translations = {
         size: "Size",
       },
     },
-    documentos: {
+    documents: {
       title: "Veterinary Prescription Generator",
       subtitle: "Fill in the details to generate a veterinary prescription in PDF format.",
       professionalSection: "Professional Information",
@@ -414,7 +414,7 @@ export const en: Translations = {
       section5p2: "We especially appreciate reports of formula or reference value errors, as they help us improve the tool's accuracy for the entire veterinary community.",
       footer: "PawCure - Support tool for veterinary professionals",
     },
-    pacientes: {
+    patients: {
       title: "Patient Management",
       subtitle: "Clinical records and data for your registered patients",
       newPatient: "New patient",
@@ -496,7 +496,7 @@ export const en: Translations = {
       createTitle: "New patient",
       createSubtitle: "Complete the new patient's information",
     },
-    historial: {
+    history: {
       title: "Clinical History",
       subtitle: "Consultation records and patient progress",
       newRecord: "New record",

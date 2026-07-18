@@ -12,12 +12,12 @@ import CalcIcon from "./CalcIcon";
 import ProfilePanel from "./ProfilePanel";
 import { useState } from "react";
 
-/** Routes where the full sidebar is visible. All other routes get the icon rail. */
-const FULL_SIDEBAR_ROUTES = ["/", "/referencia"];
+/** Rutas donde el sidebar completo es visible. Todas las demás rutas usan el riel de iconos. */
+const FULL_SIDEBAR_ROUTES = ["/", "/reference"];
 
 export default function Sidebar() {
   const [expandedCategories, setExpandedCategories] = useState<Set<CalculatorCategory>>(
-    new Set(["Emergencias", "Farmacologia", "Nutricion", "General"])
+    new Set(["Emergency", "Pharmacology", "Nutrition", "General"])
   );
   const pathname = usePathname();
   const { t } = useLanguage();
@@ -38,21 +38,21 @@ export default function Sidebar() {
 
   const mobileNavItems = [
     { href: "/",             label: t.nav.home,      Icon: Home,          exact: true  },
-    { href: "/calculadoras", label: t.nav.calculate, Icon: Calculator,    exact: false },
-    { href: "/recetas",      label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
-    { href: "/pacientes",    label: t.nav.patients,  Icon: PawPrint,      exact: false },
-    { href: "/referencia",   label: t.nav.guide,     Icon: BookOpen,      exact: true  },
+    { href: "/calculators", label: t.nav.calculate, Icon: Calculator,    exact: false },
+    { href: "/prescriptions",      label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
+    { href: "/patients",    label: t.nav.patients,  Icon: PawPrint,      exact: false },
+    { href: "/reference",   label: t.nav.guide,     Icon: BookOpen,      exact: true  },
   ];
 
   const railLinks = [
     { href: "/",             label: t.nav.home,      Icon: Home,          exact: true  },
-    { href: "/calculadoras", label: t.nav.calculate, Icon: Calculator,    exact: false },
-    { href: "/recetas",      label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
-    { href: "/pacientes",    label: t.nav.patients,  Icon: PawPrint,      exact: false },
-    { href: "/referencia",   label: t.nav.guide,     Icon: BookOpen,      exact: true  },
+    { href: "/calculators", label: t.nav.calculate, Icon: Calculator,    exact: false },
+    { href: "/prescriptions",      label: t.nav.recetas,   Icon: ClipboardList, exact: true  },
+    { href: "/patients",    label: t.nav.patients,  Icon: PawPrint,      exact: false },
+    { href: "/reference",   label: t.nav.guide,     Icon: BookOpen,      exact: true  },
   ];
 
-  /* ── Full sidebar content ──────────────────────────────────────────────── */
+  /* ── Contenido del sidebar completo ────────────────────────────────────── */
   const fullSidebar = (
     <nav className="flex h-full flex-col" aria-label="Navegacion principal">
       {/* Logo */}
@@ -66,13 +66,13 @@ export default function Sidebar() {
         </Link>
       </div>
 
-      {/* Scrollable area */}
+      {/* Área desplazable */}
       <div className="flex-1 overflow-y-auto px-3 py-4">
-        {/* Main links */}
+        {/* Enlaces principales */}
         <ul className="space-y-0.5">
           {[
             { href: "/",           label: t.nav.home,       Icon: Home     },
-            { href: "/referencia", label: t.nav.quickGuide, Icon: BookOpen },
+            { href: "/reference", label: t.nav.quickGuide, Icon: BookOpen },
           ].map(({ href, label, Icon }) => (
             <li key={href}>
               <Link
@@ -94,27 +94,27 @@ export default function Sidebar() {
           {t.nav.modules}
         </p>
 
-        {/* Module: Calculadoras */}
+        {/* Módulo: Calculadoras */}
         <ul className="space-y-0.5">
           <li>
             <Link
-              href="/calculadoras"
+              href="/calculators"
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                pathname.startsWith("/calculadoras") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+                pathname.startsWith("/calculators") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
               }`}
             >
               <Calculator className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
               <span className="flex-1">{t.nav.calculators}</span>
               <ChevronRight
-                className={`h-3.5 w-3.5 text-muted transition-transform ${pathname.startsWith("/calculadoras") ? "rotate-90" : ""}`}
+                className={`h-3.5 w-3.5 text-muted transition-transform ${pathname.startsWith("/calculators") ? "rotate-90" : ""}`}
                 strokeWidth={2.5}
               />
             </Link>
           </li>
         </ul>
 
-        {/* Calculator subcategories — only when inside /calculadoras */}
-        {pathname.startsWith("/calculadoras") && (
+        {/* Subcategorías de calculadoras — solo dentro de /calculators */}
+        {pathname.startsWith("/calculators") && (
           <ul className="ml-4 mt-0.5 mb-1 space-y-0.5 border-l border-border pl-3">
             {categories.map((category) => {
               const calcs = getCalculatorsByCategory(category.name);
@@ -157,13 +157,13 @@ export default function Sidebar() {
           </ul>
         )}
 
-        {/* Module: Recetas */}
+        {/* Módulo: Recetas */}
         <ul className="mt-0.5 space-y-0.5">
           <li>
             <Link
-              href="/recetas"
+              href="/prescriptions"
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                isActive("/recetas") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+                isActive("/prescriptions") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
               }`}
             >
               <ClipboardList className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
@@ -174,13 +174,13 @@ export default function Sidebar() {
 
         <div className="my-3 border-t border-border" />
 
-        {/* Module: Pacientes */}
+        {/* Módulo: Pacientes */}
         <ul className="mt-0.5 space-y-0.5">
           <li>
             <Link
-              href="/pacientes"
+              href="/patients"
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                pathname.startsWith("/pacientes") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
+                pathname.startsWith("/patients") ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-hover"
               }`}
             >
               <PawPrint className="h-4 w-4 flex-shrink-0" strokeWidth={2} />
@@ -189,7 +189,7 @@ export default function Sidebar() {
           </li>
         </ul>
 
-        {/* Coming soon */}
+        {/* Próximamente */}
         <ul className="space-y-0.5 mt-0.5">
           {[
             { Icon: CalendarDays, label: t.home.agendaModuleName    },
@@ -209,14 +209,14 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      {/* Footer */}
+      {/* Pie de página */}
       <div className="border-t border-border px-4 py-3">
         <ProfilePanel sidebar />
       </div>
     </nav>
   );
 
-  /* ── Icon rail (collapsed) ─────────────────────────────────────────────── */
+  /* ── Riel de iconos (colapsado) ────────────────────────────────────────── */
   const [profileOpen, setProfileOpen] = useState(false);
 
   const iconRail = (
@@ -230,7 +230,7 @@ export default function Sidebar() {
         P
       </Link>
 
-      {/* Nav icons */}
+      {/* Iconos de navegación */}
       <div className="flex flex-1 flex-col items-center gap-1">
         {railLinks.map(({ href, label, Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
@@ -249,7 +249,7 @@ export default function Sidebar() {
         })}
       </div>
 
-      {/* Settings icon */}
+      {/* Icono de ajustes */}
       <button
         onClick={() => setProfileOpen((v) => !v)}
         title={t.nav.settings}
@@ -269,7 +269,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* MOBILE: Top header */}
+      {/* MÓVIL: Encabezado superior */}
       <header className="fixed top-0 left-0 right-0 z-40 flex h-12 items-center justify-between border-b border-border bg-surface/95 backdrop-blur-sm px-4 lg:hidden">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm text-white font-bold shadow-sm">P</div>
@@ -278,7 +278,7 @@ export default function Sidebar() {
         <ProfilePanel />
       </header>
 
-      {/* MOBILE: Bottom nav */}
+      {/* MÓVIL: Navegación inferior */}
       <nav
         className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch border-t border-border bg-surface/95 backdrop-blur-sm lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
@@ -303,7 +303,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* DESKTOP: Sidebar — full or icon rail */}
+      {/* ESCRITORIO: Sidebar — completo o riel de iconos */}
       <aside
         className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:flex-col lg:border-r lg:border-border lg:bg-surface transition-all duration-300 ease-in-out ${
           isCollapsed ? "lg:w-16" : "lg:w-72"

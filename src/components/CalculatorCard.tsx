@@ -19,7 +19,7 @@ export default function CalculatorCard({
 }: CalculatorCardProps) {
   return (
     <div className="w-full max-w-2xl mx-auto">
-      {/* Header */}
+      {/* Encabezado */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-2">
           {icon && (
@@ -34,12 +34,12 @@ export default function CalculatorCard({
         )}
       </div>
 
-      {/* Input section */}
+      {/* Sección de entradas */}
       <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
         <div className="space-y-5">{children}</div>
       </div>
 
-      {/* Result section */}
+      {/* Sección de resultado */}
       {result && (
         <div className="mt-4 rounded-xl border-2 border-primary/30 bg-primary/5 p-6 shadow-sm">
           <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-primary">
@@ -52,7 +52,7 @@ export default function CalculatorCard({
   );
 }
 
-/* Subcomponents for consistent form fields within CalculatorCard */
+/* Subcomponentes para campos de formulario consistentes dentro de CalculatorCard */
 
 interface FieldProps {
   label: string;
