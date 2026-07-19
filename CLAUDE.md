@@ -2,6 +2,73 @@
 
 Este archivo proporciona orientación a Claude Code (claude.ai/code) al trabajar con el código de este repositorio.
 
+> **La documentación detallada vive en [`docs/`](docs/README.md).** Este archivo cubre
+> reglas, comandos y trampas; el detalle de cada módulo está en su documentación.
+> Antes de trabajar en un módulo, lee su doc: `src/app/<módulo>` → `docs/<módulo>/README.md`.
+
+## Documentación
+
+> ### ⚠️ Regla obligatoria en TODA tarea
+>
+> **Antes de tocar código: lee la documentación del módulo. Al terminar: actualízala.**
+>
+> No es opcional ni depende del tamaño del cambio. La documentación solo sirve si dice
+> la verdad; un doc desactualizado es peor que no tenerlo, porque induce a error a quien
+> lo lee —persona o agente.
+
+### Flujo obligatorio
+
+**1. Antes de empezar** — localiza y lee el doc del módulo que vas a tocar:
+
+| Vas a tocar | Lee primero |
+|---|---|
+| `src/app/<módulo>/` | `docs/<módulo>/README.md` |
+| `supabase/migrations/` o queries | [`docs/database/`](docs/database/README.md) |
+| `src/lib/i18n/` o `src/components/` | [`docs/platform/`](docs/platform/README.md) |
+| No sabes por dónde empezar | [`docs/architecture.md`](docs/architecture.md) |
+
+Presta atención a *Decisiones de diseño* y *Deudas conocidas*: recogen decisiones
+deliberadas que parecen errores. **No las "corrijas" sin entender el porqué.**
+
+**2. Al terminar** — revisa si tu cambio invalidó algo de lo documentado:
+
+- [ ] ¿Cambiaron rutas, archivos o responsabilidades? → actualiza las tablas *Rutas* y
+      *Archivos clave*.
+- [ ] ¿Tomaste una decisión no evidente en el código? → añádela a *Decisiones de diseño*.
+- [ ] ¿Resolviste o creaste una limitación? → actualiza *Deudas conocidas*.
+- [ ] ¿Introdujiste un término de dominio? → añádelo a [`docs/glossary.md`](docs/glossary.md).
+- [ ] ¿Los paths que citaste siguen existiendo? → verifícalos con `ls`.
+- [ ] ¿El cambio afecta a otro módulo? → actualiza también su doc y el enlace cruzado.
+
+**3. En el mismo commit** — código y documentación viajan juntos. Un commit que cambia
+comportamiento documentado sin tocar el doc está incompleto.
+
+### Reglas de contenido
+
+- **Cuándo documentar**: features nuevas o cambios que modifiquen un flujo del sistema
+  (flujos de datos, decisiones arquitectónicas).
+- **Cuándo actualizar**: al modificar código que ya tiene documentación en `docs/`.
+- **Qué NO documentar**: bugfixes, cambios triviales, implementación evidente desde el
+  código. Documentar de más también degrada el sistema.
+- **Dónde**: los módulos con ruta espejan `src/app/` (`src/app/patients/` →
+  `docs/patients/`). Lo transversal va en `docs/database/` o `docs/platform/`.
+- **Qué incluir**: el qué, el porqué y el cómo a nivel conceptual. No repetir lo que el
+  código ya dice — la sección *Decisiones de diseño* es la más valiosa.
+- **Cómo**: plantillas y convenciones en [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md).
+- **Sincronía**: si tocas código documentado, actualiza el doc **en el mismo commit**.
+- **Paths**: verifica cada path con `ls` antes de commitear. Nunca los escribas de
+  memoria — un path roto induce a inventar.
+- **Términos nuevos del dominio**: añádelos a [`docs/glossary.md`](docs/glossary.md).
+
+**Navegación:**
+
+| Si buscas… | Ve a |
+|---|---|
+| Visión general y orden de lectura | [`docs/architecture.md`](docs/architecture.md) |
+| Significado de un término | [`docs/glossary.md`](docs/glossary.md) |
+| Esquema, RLS o migraciones | [`docs/database/`](docs/database/README.md) |
+| Índice completo | [`docs/README.md`](docs/README.md) |
+
 ## Convención de idioma (regla principal del proyecto)
 
 **Todo el código en inglés. Comentarios y documentación en español.**
@@ -43,7 +110,9 @@ Existen **dos lockfiles** (`package-lock.json` y `pnpm-lock.yaml`). Usa npm salv
 
 ### Variables de entorno (requeridas, no documentadas en el README)
 
-`NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` en `.env.local`. Sin ellas la app falla en runtime: los tres clientes Supabase las leen con `!`.
+`NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en `.env.local` (plantilla en `.env.example`). Sin ellas la app falla en runtime: los tres clientes Supabase las leen con `!`.
+
+La clave publicable (`sb_publishable_…`) es la que Supabase llamaba `anon key`. Nunca uses aquí la `secret`/`service_role`: omite RLS, que es la única barrera de datos de esta app.
 
 ### Migraciones
 

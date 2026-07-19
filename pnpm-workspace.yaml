@@ -1,0 +1,7 @@
+allowBuilds:
+  # Next.js lo usa para optimizacion de imagenes (binario nativo)
+  sharp: true
+  # Resolver nativo que usa eslint-config-next
+  unrs-resolver: true
+  # Su postinstall solo imprime un mensaje de financiacion: no hace falta
+  core-js: false
